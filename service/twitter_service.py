@@ -15,3 +15,13 @@ def has_twitter_account(username):
         return len(users) > 0
     except:
         return False
+
+def get_twitter_accounts(usernames):
+    # try:
+    users = t.users.lookup(screen_name=','.join(usernames), _timeout=1)
+    user_names = []
+    for user in users:
+        user_names.append(user['screen_name'].lower())
+    return user_names
+    # except:
+    #     return False
