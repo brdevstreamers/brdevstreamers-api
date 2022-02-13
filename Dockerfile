@@ -2,7 +2,7 @@ FROM python:3.9
 
 WORKDIR /code
 
-COPY ./requirements.txt /code/requirements.txt
+COPY ./Pipfile /code/Pipfile
 
 RUN pip install -p
 
