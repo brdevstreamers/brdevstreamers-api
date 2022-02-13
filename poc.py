@@ -5,12 +5,7 @@ config = dotenv_values(".env")
 
 twitch = Twitch(config['CLIENT_ID'], config['CLIENT_SECRET'])
 
-games = twitch.get_games(names=['Software and Game Development'])
+users = twitch.get_users(user_ids=['227168488'])
 
-game_id = games['data'][0]['id']
 
-streams = twitch.get_streams(language="pt", game_id=game_id)
-
-for stream in streams['data']:
-    if stream['game_id'] == game_id:
-        print(stream['user_login'])
+print(users)
