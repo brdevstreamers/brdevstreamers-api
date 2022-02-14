@@ -9,19 +9,14 @@ t = Twitter(
         config['TWITTER_API_KEY'], 
         config['TWITTER_API_SECRET']))
 
+user_twitters = {}
+
 def has_twitter_account(username):
     try:
-        users = t.users.lookup(screen_name=username, _timeout=1)
-        return len(users) > 0
+        if username not in user_twitters:
+            users = t.users.lookup(screen_name=username, _timeout=1)
+            user_twitters[username] = len(users) > 0
     except:
-        return False
-
-def get_twitter_accounts(usernames):
-    # try:
-    users = t.users.lookup(screen_name=','.join(usernames), _timeout=1)
-    user_names = []
-    for user in users:
-        user_names.append(user['screen_name'].lower())
-    return user_names
-    # except:
-    #     return False
+        user_twitters[username] = False
+        
+    return user_twitters[username]
