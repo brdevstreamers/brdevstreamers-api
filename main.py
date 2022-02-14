@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from service.streamer_service import get_streamers
+from service.streamer_service import get_streamers, get_vods
 
 app = FastAPI()
 
@@ -26,6 +26,10 @@ app.add_middleware(
 async def root():  
     return get_streamers()
 
+@app.get("/vods")
+async def vods():  
+    return get_vods()
+
 
     
 if __name__ == '__main__':
@@ -33,6 +37,6 @@ if __name__ == '__main__':
                 host="0.0.0.0",
                 port=8000,
                 reload=True,
-                ssl_keyfile="/etc/letsencrypt/live/brstreamers.dev/privkey.pem", 
-                ssl_certfile="/etc/letsencrypt/live/brstreamers.dev/cert.pem"
+                # ssl_keyfile="/etc/letsencrypt/live/brstreamers.dev/privkey.pem", 
+                # ssl_certfile="/etc/letsencrypt/live/brstreamers.dev/cert.pem"
                 )
