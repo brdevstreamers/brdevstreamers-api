@@ -12,6 +12,8 @@ origins = [
     "http://localhost:3000",
     "https://brstreamers.dev",
     "https://brstreamers.dev:8000",
+    "brstreamers.dev",
+    "brstreamers.dev:8000"
 ]
 
 app.add_middleware(
@@ -22,14 +24,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def root():  
     return get_streamers()
 
+
 @app.get("/vods")
 async def vods():  
     return get_vods()
-
 
     
 if __name__ == '__main__':
