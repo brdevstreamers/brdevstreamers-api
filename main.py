@@ -11,6 +11,7 @@ origins = [
     "http://localhost:8000",
     "http://localhost:3000",
     "https://brstreamers.dev",
+    "https://qa.brstreamers.dev",
     "https://brstreamers.dev:8000",
     "brstreamers.dev",
     "brstreamers.dev:8000"
