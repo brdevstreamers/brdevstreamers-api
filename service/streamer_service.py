@@ -26,7 +26,7 @@ def get_streamers():
 
         streamer = get_streamer(s['user_id'])
         stream['profile_image_url'] = streamer['profile_image_url']
-        stream['description'] = streamer['description']
+        stream['description'] = streamer['description'][:100] + '...'
         stream['has_twitter'] = has_twitter_account(s['user_login'])
         stream['has_github'] = has_github_account(s['user_login'])
         streams_model.append(stream)
@@ -56,7 +56,7 @@ def get_vods():
             stream['duration'] = s['duration']
             streamer = get_streamer(s['user_id'])
             stream['profile_image_url'] = streamer['profile_image_url']
-            stream['description'] = streamer['description']
+            stream['description'] = streamer['description'][:100] + '...'
             stream['has_twitter'] = has_twitter_account(s['user_login'])
             stream['has_github'] = has_github_account(s['user_login'])
             vods_model.append(stream)
