@@ -1,5 +1,6 @@
 from twitchAPI.twitch import Twitch
 from dotenv import dotenv_values
+from model.streamer_model import Streamer
 from service.github_service import has_github_account
 from twitchAPI.types import TimePeriod
 from service.twitter_service import has_twitter_account
@@ -29,7 +30,18 @@ def get_streamers():
         stream['description'] = streamer['description'][:100] + '...'
         stream['has_twitter'] = has_twitter_account(s['user_login'])
         stream['has_github'] = has_github_account(s['user_login'])
-        streams_model.append(stream)
+
+        try:
+            streamer_model = Streamer.select().where(Streamer.user_login == s['user_login']).get()
+            stream['github_url'] = streamer_model.github
+            stream['twitter_url'] = streamer_model.twitter
+            stream['instagram_url'] = streamer_model.instagram
+            stream['linkedin_url'] = streamer_model.linkedin
+            stream['discord_url'] = streamer_model.discord
+        except:
+            print('User Not Found')
+        finally:
+            streams_model.append(stream)
 
     return streams_model
 
@@ -53,6 +65,7 @@ def get_vods():
             stream['viewer_count'] = s['view_count']
             stream['started_at'] = s['published_at']
             stream['thumbnail_url'] = s['thumbnail_url']
+            stream['stream_id'] = s['id']
             stream['duration'] = s['duration']
             streamer = get_streamer(s['user_id'])
             stream['profile_image_url'] = streamer['profile_image_url']
