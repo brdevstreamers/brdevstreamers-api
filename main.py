@@ -19,17 +19,7 @@ app_api = FastAPI(openapi_prefix="/api")
 
 init_db()
 
-
-origins = [
-    "http://localhost",
-    "http://localhost:8000",
-    "http://localhost:3000",
-    "https://brstreamers.dev",
-    "https://qa.brstreamers.dev",
-    "https://brstreamers.dev:8000",
-    "brstreamers.dev",
-    "brstreamers.dev:8000"
-]
+origins = ["*"]
 
 app_public.add_middleware(
     CORSMiddleware,
