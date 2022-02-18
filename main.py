@@ -106,6 +106,15 @@ app = FastAPI()
 app.mount("/api", app_api)
 app.mount("/public", app_public)
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 if __name__ == '__main__':
     if(config["ENV"] == 'prod'):
         uvicorn.run("main:app",
