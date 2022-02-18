@@ -3,7 +3,7 @@ from peewee import *
 from dotenv import dotenv_values
 config = dotenv_values(".env")
 
-db = SqliteDatabase(config["DB"])
+db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
 
 class Streamer(Model):
     user_id = CharField(unique=True)
