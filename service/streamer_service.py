@@ -28,8 +28,6 @@ def get_streamers():
         streamer = get_streamer(s['user_id'])
         stream['profile_image_url'] = streamer['profile_image_url']
         stream['description'] = streamer['description'][:100] + '...'
-        stream['has_twitter'] = has_twitter_account(s['user_login'])
-        stream['has_github'] = has_github_account(s['user_login'])
 
         try:
             streamer_model = Streamer.select().where(Streamer.user_login == s['user_login']).get()
@@ -70,9 +68,18 @@ def get_vods():
             streamer = get_streamer(s['user_id'])
             stream['profile_image_url'] = streamer['profile_image_url']
             stream['description'] = streamer['description'][:100] + '...'
-            stream['has_twitter'] = has_twitter_account(s['user_login'])
-            stream['has_github'] = has_github_account(s['user_login'])
-            vods_model.append(stream)
+
+            try:
+                streamer_model = Streamer.select().where(Streamer.user_login == s['user_login']).get()
+                stream['github_url'] = streamer_model.github
+                stream['twitter_url'] = streamer_model.twitter
+                stream['instagram_url'] = streamer_model.instagram
+                stream['linkedin_url'] = streamer_model.linkedin
+                stream['discord_url'] = streamer_model.discord
+            except:
+                print('User Not Found')
+            finally:
+                vods_model.append(stream)
 
     return vods_model
 

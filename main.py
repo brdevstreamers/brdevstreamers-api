@@ -45,12 +45,12 @@ async def verify_user_agent(request: Request, call_next):
         if request.headers['token'] == config['API_TOKEN']:
             response = await call_next(request)
             return response
-    except:
-        print('Unauthorized')
-
-    return JSONResponse(content={
+    except Exception as e:
+        print(e)
+        return JSONResponse(content={
         "message": "Unauthorized"
     }, status_code=401)
+    
 
 
 @app_public.get("/")
@@ -89,6 +89,20 @@ async def save_streamer(streamer: StreamerViewModel):
         linkedin = streamer.linkedin,
         github = streamer.github,
         twitter = streamer.twitter)
+
+        
+
+@app_api.put("/streamer")
+async def update_streamer(streamer: StreamerViewModel):
+    res = (Streamer
+       .update({Streamer.instagram: streamer.instagram,
+                Streamer.linkedin: streamer.linkedin,
+                Streamer.github: streamer.github,
+                Streamer.twitter: streamer.twitter,
+                Streamer.discord: streamer.discord})
+       .where(Streamer.user_login == streamer.user_login)
+       .execute())
+    return res
         
 
 
