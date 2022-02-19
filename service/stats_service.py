@@ -1,0 +1,30 @@
+from model.stat_model import Stat
+from peewee import *
+from dotenv import dotenv_values
+config = dotenv_values(".env")
+
+db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
+
+def get_stats():
+    cursor = db.execute_sql(
+        "SELECT distinct s.user_login, " +
+"(SELECT count(*) FROM stat WHERE user_login = s.user_login AND type = 'STREAM')," +
+"(SELECT count(*) FROM stat WHERE user_login = s.user_login AND type = 'VOD')" +
+"FROM stat s")
+
+    stats = []
+
+    for row in cursor.fetchall():
+        stat = {}
+        stat['user_login'] = row[0]
+        stat['stream_clicks'] = row[1]
+        stat['vod_clicks'] = row[2]
+        stats.append(stat)
+
+    return stats
+       
+def get_stats_summary():
+    streams = Stat.select().where(Stat.type == 'STREAM').count()
+    vods = Stat.select().where(Stat.type == 'VOD').count()
+    stats_summary = {"streams": streams, "vods": vods}
+    return stats_summary
