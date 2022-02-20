@@ -28,3 +28,12 @@ def get_stats_summary():
     vods = Stat.select().where(Stat.type == 'VOD').count()
     stats_summary = {"streams": streams, "vods": vods}
     return stats_summary
+
+def compute_stat(stat: Stat):
+    db_stat = Stat.select().where(Stat.user_login == stat.user_login, 
+        Stat.type == stat.type,
+        Stat.access_date == stat.access_date,
+        Stat.fingerprint == stat.fingerprint).count()
+    if db_stat == 0:
+        return Stat.create(user_login=stat.user_login, access_date=stat.access_date, type=stat.type, fingerprint=stat.fingerprint)
+    return None

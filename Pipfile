@@ -15,6 +15,7 @@ uvicorn = {extras = ["standard"],version = "*"}
 twitter = "*"
 pygithub = "*"
 peewee = "*"
+playhouse = "*"
 
 [requires]
 python_version = "3.7"

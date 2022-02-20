@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from model.stat_model import Stat
-from service.stats_service import get_stats, get_stats_summary
+from service.stats_service import get_stats, get_stats_summary, compute_stat
 from service.streamer_service import get_streamers, get_vods
 from fastapi.middleware.cors import CORSMiddleware
 from model.streamer_model import Streamer
@@ -32,7 +32,8 @@ async def vods():
 
 @app_public.post("/stats")
 async def stats(stat: StatViewModel):
-    return Stat.create(user_login=stat.user_login, access_date=stat.access_date, type=stat.type)
+    return compute_stat(stat)
+
 
 
 @app_public.get("/stats")
