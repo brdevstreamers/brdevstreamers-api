@@ -9,8 +9,9 @@ def get_stats():
     cursor = db.execute_sql(
         "SELECT distinct s.user_login, " +
 "(SELECT count(*) FROM stat WHERE user_login = s.user_login AND type = 'STREAM')," +
-"(SELECT count(*) FROM stat WHERE user_login = s.user_login AND type = 'VOD')" +
-"FROM stat s")
+"(SELECT count(*) FROM stat WHERE user_login = s.user_login AND type = 'VOD')," +
+"(SELECT count(*) FROM stat WHERE user_login = s.user_login AND type = 'PREVIEW')" +
+"FROM stat s ORDER BY s.user_login")
 
     stats = []
 
@@ -19,6 +20,7 @@ def get_stats():
         stat['user_login'] = row[0]
         stat['stream_clicks'] = row[1]
         stat['vod_clicks'] = row[2]
+        stat['preview_clicks'] = row[3]
         stats.append(stat)
 
     return stats
@@ -26,7 +28,8 @@ def get_stats():
 def get_stats_summary():
     streams = Stat.select().where(Stat.type == 'STREAM').count()
     vods = Stat.select().where(Stat.type == 'VOD').count()
-    stats_summary = {"streams": streams, "vods": vods}
+    previews = Stat.select().where(Stat.type == 'PREVIEW').count()
+    stats_summary = {"streams": streams, "vods": vods, "previews": previews}
     return stats_summary
 
 def compute_stat(stat: Stat):
