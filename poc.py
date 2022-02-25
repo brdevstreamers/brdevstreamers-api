@@ -1,9 +1,8 @@
 from twitchAPI.twitch import Twitch
-from dotenv import dotenv_values
-config = dotenv_values(".env")
 
+from core import settings
 
-twitch = Twitch(config['CLIENT_ID'], config['CLIENT_SECRET'])
+twitch = Twitch(settings.CLIENT_ID, settings.CLIENT_SECRET)
 
 users = twitch.get_users(user_ids=['227168488'])
 

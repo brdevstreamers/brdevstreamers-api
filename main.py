@@ -1,15 +1,12 @@
-
-from model.initializer import init_db, migrate_db
-from dotenv import dotenv_values
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
-from controller.public_api import app_public
+
 from controller.private_api import app_private
-
+from controller.public_api import app_public
+from core import settings
+from model.initializer import init_db, migrate_db
 from view_model.streamer_viewmodel import StreamerViewModel
-
-config = dotenv_values(".env")
 
 init_db()
 migrate_db()
@@ -30,15 +27,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-if __name__ == '__main__':
-    if(config["ENV"] == 'prod'):
-        uvicorn.run("main:app",
-                    host="0.0.0.0",
-                    port=8000,
-                    reload=True,
-                    ssl_keyfile=config["PRIVATE_KEY"],
-                    ssl_certfile=config["CERT"]
-                    )
+if __name__ == "__main__":
+    if settings.ENV == "prod":
+        uvicorn.run(
+            "main:app",
+            host="0.0.0.0",
+            port=8000,
+            reload=True,
+            ssl_keyfile=settings.PRIVATE_KEY,
+            ssl_certfile=settings.CERT,
+        )
     else:
         uvicorn.run("main:app",
                     host="0.0.0.0",

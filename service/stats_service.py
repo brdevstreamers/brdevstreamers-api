@@ -1,9 +1,8 @@
+from core import settings
 from model.stat_model import Stat
 from peewee import *
-from dotenv import dotenv_values
-config = dotenv_values(".env")
 
-db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
+db = SqliteDatabase(settings.DB + "brdevstreamers.db")
 
 def get_stats():
     cursor = db.execute_sql(

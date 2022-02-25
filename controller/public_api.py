@@ -1,10 +1,7 @@
 from fastapi import FastAPI
-from model.stat_model import Stat
-from service.stats_service import get_stats, get_stats_summary, compute_stat
-from service.streamer_service import get_streamers, get_vods
 from fastapi.middleware.cors import CORSMiddleware
-from model.streamer_model import Streamer
-
+from service.stats_service import compute_stat, get_stats, get_stats_summary
+from service.streamer_service import get_streamers, get_vods
 from view_model.stat_viewmodel import StatViewModel
 
 origins = ["*"]

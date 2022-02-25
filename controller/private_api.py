@@ -1,17 +1,16 @@
 from http.client import HTTPException
 from urllib.request import Request
+
+from core import settings
 from fastapi import FastAPI
-from dotenv import dotenv_values
-from starlette.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from model.streamer_model import Streamer
+from starlette.responses import JSONResponse
 from view_model.streamer_viewmodel import StreamerViewModel
-
 
 origins = ["*"]
 
 
-config = dotenv_values(".env")
 app_private = FastAPI(openapi_prefix="/api")
 
 app_private.add_middleware(
@@ -25,7 +24,7 @@ app_private.add_middleware(
 @app_private.middleware("http")
 async def verify_user_agent(request: Request, call_next):
     try:
-        if request.headers['token'] == config['API_TOKEN']:
+        if request.headers["token"] == settings.API_TOKEN:
             response = await call_next(request)
             return response
     except Exception as e:

@@ -1,13 +1,14 @@
+from core import settings
 from twitter import *
-from dotenv import dotenv_values
 
-config = dotenv_values(".env")
 t = Twitter(
     auth=OAuth(
-        config['TWITTER_ACCESS_TOKEN'], 
-        config['TWITTER_ACCESS_SECRET'],
-        config['TWITTER_API_KEY'], 
-        config['TWITTER_API_SECRET']))
+        settings.TWITTER_ACCESS_TOKEN,
+        settings.TWITTER_ACCESS_SECRET,
+        settings.TWITTER_API_KEY,
+        settings.TWITTER_API_SECRET,
+    )
+)
 
 user_twitters = {}
 
