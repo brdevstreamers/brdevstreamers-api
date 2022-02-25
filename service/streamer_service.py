@@ -1,12 +1,10 @@
-from twitchAPI.twitch import Twitch
-from dotenv import dotenv_values
+from core import settings
 from model.streamer_model import Streamer
-from service.github_service import has_github_account
+from twitchAPI.twitch import Twitch
 from twitchAPI.types import TimePeriod
-from service.twitter_service import has_twitter_account
 
-config = dotenv_values(".env")
-twitch = Twitch(config['CLIENT_ID'], config['CLIENT_SECRET'])
+twitch = Twitch(settings.CLIENT_ID, settings.CLIENT_SECRET)
+
 
 def get_streamers():
     games = twitch.get_games(names=['Software and Game Development'])

@@ -1,9 +1,10 @@
 from enum import unique
-from peewee import *
-from dotenv import dotenv_values
-config = dotenv_values(".env")
 
-db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
+from core import settings
+from peewee import *
+
+db = SqliteDatabase(settings.DB + "brdevstreamers.db")
+
 
 class Streamer(Model):
     user_id = CharField(unique=True)

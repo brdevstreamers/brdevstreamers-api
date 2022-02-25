@@ -1,13 +1,13 @@
+from core import settings
 from github import Github
-from dotenv import dotenv_values
 
-config = dotenv_values(".env")
 user_githubs = {}
+
 
 def has_github_account(username):
     try:
         if username not in user_githubs:
-            g = Github(config["GITHUB_TOKEN"])
+            g = Github(settings.GITHUB_TOKEN)
             user = g.get_user(username)
             user_githubs[username] = True
     except:

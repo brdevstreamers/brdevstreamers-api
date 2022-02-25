@@ -1,11 +1,12 @@
+from core import settings
 from peewee import *
-from model.streamer_model import Streamer
-from model.stat_model import Stat
-from dotenv import dotenv_values
-from playhouse.migrate import * 
+from playhouse.migrate import *
 
-config = dotenv_values(".env")
-db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
+from model.stat_model import Stat
+from model.streamer_model import Streamer
+
+db = SqliteDatabase(settings.DB + "brdevstreamers.db")
+
 
 def init_db():   
     db.connect()
