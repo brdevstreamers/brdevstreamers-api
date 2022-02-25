@@ -26,3 +26,7 @@ class Settings(BaseSettings):
 
     # The database location
     DB: str = ""
+
+    class Config:
+        case_sensitive = True
+        env_file = ".env"
