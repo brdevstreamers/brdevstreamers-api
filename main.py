@@ -1,5 +1,5 @@
 
-from model.initializer import init_db, migrate_db
+from model.initializer import init_db
 from dotenv import dotenv_values
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,12 +7,11 @@ import uvicorn
 from controller.public_api import app_public
 from controller.private_api import app_private
 
-from view_model.streamer_viewmodel import StreamerViewModel
+from view_model.user_viewmodel import UserViewModel
 
 config = dotenv_values(".env")
 
 init_db()
-migrate_db()
 
 origins = ["*"]
 

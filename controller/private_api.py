@@ -1,11 +1,14 @@
 from http.client import HTTPException
-from urllib.request import Request
+import json
+from urllib.request import Request, urlopen
+from aioredis import AuthError
 from fastapi import FastAPI
 from dotenv import dotenv_values
+from jose import jwt
 from starlette.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
-from model.streamer_model import Streamer
-from view_model.streamer_viewmodel import StreamerViewModel
+from model.user_model import User
+from view_model.user_viewmodel import UserViewModel
 
 
 origins = ["*"]
@@ -22,64 +25,111 @@ app_private.add_middleware(
     allow_headers=["*"],
 )
 
+
+AUTH0_DOMAIN = 'zapperson.us.auth0.com'
+API_AUDIENCE = "BrStreamersApi"
+ALGORITHMS = ["RS256"]
+
+
 @app_private.middleware("http")
 async def verify_user_agent(request: Request, call_next):
-    try:
-        if request.headers['token'] == config['API_TOKEN']:
+    token = request.headers['Authorization']
+    token = token.split(" ")[1]
+    jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
+    jwks = json.loads(jsonurl.read())
+    unverified_header = jwt.get_unverified_header(token)
+    rsa_key = {}
+    for key in jwks["keys"]:
+        if key["kid"] == unverified_header["kid"]:
+            rsa_key = {
+                "kty": key["kty"],
+                "kid": key["kid"],
+                "use": key["use"],
+                "n": key["n"],
+                "e": key["e"]
+            }
+    if rsa_key:
+            try:
+                payload = jwt.decode(
+                    token,
+                    rsa_key,
+                    algorithms=ALGORITHMS,
+                    audience=API_AUDIENCE,
+                    issuer="https://"+AUTH0_DOMAIN+"/"
+                )
+            except jwt.ExpiredSignatureError:
+                raise AuthError({"code": "token_expired",
+                                "description": "token is expired"}, 401)
+            except jwt.JWTClaimsError:
+                raise AuthError({"code": "invalid_claims",
+                                "description":
+                                    "incorrect claims,"
+                                    "please check the audience and issuer"}, 401)
+            except Exception:
+                raise AuthError({"code": "invalid_header",
+                                "description":
+                                    "Unable to parse authentication"
+                                    " token."}, 401)
+    if payload is not None:
             response = await call_next(request)
             return response
-    except Exception as e:
-        print(e)
-        return JSONResponse(content={
-        "message": "Unauthorized"
-    }, status_code=401)
-    
 
-@app_private.get("/streamers")
-async def streamer():
+    raise AuthError({"code": "invalid_header",
+                        "description": "Unable to find appropriate key"}, 401)
+
+
+
+
+@app_private.get("/users")
+async def get_users():
     try:
-        streamers = Streamer.select().get()
+        streamers = User.select().get()
         return streamers
     except:
-        raise HTTPException(status_code=404, detail="Streamers not found")
+        raise HTTPException(status_code=404, detail="Users not found")
 
 
-@app_private.get("/streamer/{user_login}")
-async def streamer(user_login: str):
+@app_private.get("/user/{user_login}")
+async def user(user_login: str):
     try:
-        return Streamer.select().where(Streamer.user_login == user_login).get()
+        return User.select().where(User.user_login == user_login).get()
     except:
         raise HTTPException(status_code=404, detail="Streamer not found")
 
 
-@app_private.post("/streamer")
-async def save_streamer(streamer: StreamerViewModel):
-    return Streamer.create(user_id=streamer.user_id, 
-        user_login=streamer.user_login,
-        discord = streamer.discord,
-        instagram = streamer.instagram,
-        linkedin = streamer.linkedin,
-        github = streamer.github,
-        twitter = streamer.twitter)
+@app_private.post("/user")
+async def save_user(user: UserViewModel):
+    return User.create(
+        user_login=user.user_login,
+        email=user.email,
+        bio=user.bio,
+        discord = user.discord,
+        instagram = user.instagram,
+        linkedin = user.linkedin,
+        github = user.github,
+        twitter = user.twitter)
         
 
-@app_private.put("/streamer")
-async def update_streamer(streamer: StreamerViewModel):
-    res = (Streamer
-       .update({Streamer.instagram: streamer.instagram,
-                Streamer.linkedin: streamer.linkedin,
-                Streamer.github: streamer.github,
-                Streamer.twitter: streamer.twitter,
-                Streamer.discord: streamer.discord})
-       .where(Streamer.user_login == streamer.user_login)
+@app_private.put("/user")
+async def update_user(user: UserViewModel):
+    res = (User
+       .update({User.instagram: user.instagram,
+                User.linkedin: user.linkedin,
+                User.github: user.github,
+                User.twitter: user.twitter,
+                User.discord: user.discord,
+                User.bio: user.bio
+                })
+       .where(User.user_login == user.user_login)
        .execute())
     return res
         
 
-@app_private.delete("/streamer/{user_login}")
+@app_private.delete("/user/{user_login}")
 async def delete_streamer(user_login):
     try:
-        streamer = Streamer.delete().where(Streamer.user_login == user_login).execute()
-        return "OK"
+        user = User.delete().where(User.user_login == user_login).execute()
+        return user
     except:
         raise HTTPException(status_code=404, detail="Streamer not found")
+

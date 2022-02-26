@@ -5,11 +5,10 @@ config = dotenv_values(".env")
 
 db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
 
-class Stat(Model):
-    user_login = CharField(null=False)
-    access_date = DateField(null=False)
-    type = CharField(null=False)
-    fingerprint = CharField(null=False)
+class UserInteraction(Model):
+    user_id= CharField(null=False)
+    date = DateField(null=False)
+    interaction_fingerprint = CharField(null=False)
 
     class Meta:
         database = db

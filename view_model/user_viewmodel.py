@@ -2,9 +2,10 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class StreamerViewModel(BaseModel):
-    user_id:str
+class UserViewModel(BaseModel):
     user_login: str
+    email: str
+    bio: Optional[str]
     discord: Optional[str]
     instagram: Optional[str]
     linkedin: Optional[str]

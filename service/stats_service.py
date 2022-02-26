@@ -1,6 +1,7 @@
-from model.stat_model import Stat
 from peewee import *
 from dotenv import dotenv_values
+
+from model.user_interaction_model import UserInteraction
 config = dotenv_values(".env")
 
 db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
@@ -26,17 +27,18 @@ def get_stats():
     return stats
        
 def get_stats_summary():
-    streams = Stat.select().where(Stat.type == 'STREAM').count()
-    vods = Stat.select().where(Stat.type == 'VOD').count()
-    previews = Stat.select().where(Stat.type == 'PREVIEW').count()
-    stats_summary = {"streams": streams, "vods": vods, "previews": previews}
-    return stats_summary
+    # streams = Stat.select().where(Stat.type == 'STREAM').count()
+    # vods = Stat.select().where(Stat.type == 'VOD').count()
+    # previews = Stat.select().where(Stat.type == 'PREVIEW').count()
+    # stats_summary = {"streams": streams, "vods": vods, "previews": previews}
+    # return stats_summary
+    return None
 
-def compute_stat(stat: Stat):
-    db_stat = Stat.select().where(Stat.user_login == stat.user_login, 
-        Stat.type == stat.type,
-        Stat.access_date == stat.access_date,
-        Stat.fingerprint == stat.fingerprint).count()
-    if db_stat == 0:
-        return Stat.create(user_login=stat.user_login, access_date=stat.access_date, type=stat.type, fingerprint=stat.fingerprint)
+def compute_stat(stat: UserInteraction):
+    # db_stat = Stat.select().where(Stat.user_login == stat.user_login, 
+    #     Stat.type == stat.type,
+    #     Stat.access_date == stat.access_date,
+    #     Stat.fingerprint == stat.fingerprint).count()
+    # if db_stat == 0:
+    #     return Stat.create(user_login=stat.user_login, access_date=stat.access_date, type=stat.type, fingerprint=stat.fingerprint)
     return None

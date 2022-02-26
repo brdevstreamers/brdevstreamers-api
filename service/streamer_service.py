@@ -1,6 +1,7 @@
+from random import shuffle
 from twitchAPI.twitch import Twitch
 from dotenv import dotenv_values
-from model.streamer_model import Streamer
+from model.user_model import User
 from service.github_service import has_github_account
 from twitchAPI.types import TimePeriod
 from service.twitter_service import has_twitter_account
@@ -30,7 +31,7 @@ def get_streamers():
         stream['description'] = streamer['description'][:100] + '...'
 
         try:
-            streamer_model = Streamer.select().where(Streamer.user_login == s['user_login']).get()
+            streamer_model = User.select().where(User.user_login == s['user_login']).get()
             stream['github_url'] = streamer_model.github
             stream['twitter_url'] = streamer_model.twitter
             stream['instagram_url'] = streamer_model.instagram
@@ -41,6 +42,7 @@ def get_streamers():
         finally:
             streams_model.append(stream)
 
+    shuffle(streams_model)
     return streams_model
 
 def get_streamer(id):
@@ -70,14 +72,14 @@ def get_vods():
             stream['description'] = streamer['description'][:100] + '...'
 
             try:
-                streamer_model = Streamer.select().where(Streamer.user_login == s['user_login']).get()
+                streamer_model = User.select().where(User.user_login == s['user_login']).get()
                 stream['github_url'] = streamer_model.github
                 stream['twitter_url'] = streamer_model.twitter
                 stream['instagram_url'] = streamer_model.instagram
                 stream['linkedin_url'] = streamer_model.linkedin
                 stream['discord_url'] = streamer_model.discord
             except:
-                print('User Not Found')
+                print(f'User Not Found: {s["user_login"]}')
             finally:
                 vods_model.append(stream)
 
