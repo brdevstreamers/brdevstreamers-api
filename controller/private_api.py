@@ -1,7 +1,6 @@
 from http.client import HTTPException
 import json
 from urllib.request import Request, urlopen
-from aioredis import AuthError
 from fastapi import FastAPI
 from dotenv import dotenv_values
 from jose import jwt
@@ -58,24 +57,16 @@ async def verify_user_agent(request: Request, call_next):
                     issuer="https://"+AUTH0_DOMAIN+"/"
                 )
             except jwt.ExpiredSignatureError:
-                raise AuthError({"code": "token_expired",
-                                "description": "token is expired"}, 401)
+                raise HTTPException(status_code=401, detail="token_expired")
             except jwt.JWTClaimsError:
-                raise AuthError({"code": "invalid_claims",
-                                "description":
-                                    "incorrect claims,"
-                                    "please check the audience and issuer"}, 401)
+                raise HTTPException(status_code=404, detail="invalid_claims")
+                
             except Exception:
-                raise AuthError({"code": "invalid_header",
-                                "description":
-                                    "Unable to parse authentication"
-                                    " token."}, 401)
+                raise HTTPException(status_code=401, detail="invalid_header")
     if payload is not None:
             response = await call_next(request)
             return response
-
-    raise AuthError({"code": "invalid_header",
-                        "description": "Unable to find appropriate key"}, 401)
+    raise HTTPException(status_code=401, detail="invalid_header")
 
 
 
