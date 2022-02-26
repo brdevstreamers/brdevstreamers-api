@@ -16,6 +16,7 @@ twitter = "*"
 pygithub = "*"
 peewee = "*"
 python-jose = {extras = ["cryptography"],version = "*"}
+aioredis = "*"
 
 [requires]
 python_version = "3.7"
