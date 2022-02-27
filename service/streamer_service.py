@@ -37,6 +37,7 @@ def get_streamers():
             stream['instagram_url'] = streamer_model.instagram
             stream['linkedin_url'] = streamer_model.linkedin
             stream['discord_url'] = streamer_model.discord
+            stream['bio'] = streamer_model.bio
         except:
             print('User Not Found')
         finally:
@@ -78,6 +79,7 @@ def get_vods():
                 stream['instagram_url'] = streamer_model.instagram
                 stream['linkedin_url'] = streamer_model.linkedin
                 stream['discord_url'] = streamer_model.discord
+                stream['bio'] = streamer_model.bio
             except:
                 print(f'User Not Found: {s["user_login"]}')
             finally:
