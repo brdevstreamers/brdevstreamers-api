@@ -6,8 +6,10 @@ config = dotenv_values(".env")
 db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
 
 class UserInteraction(Model):
-    user_id= CharField(null=False)
+    user_login= CharField(null=False)
+    target_user = CharField(null=True)
     date = DateField(null=False)
+    type = CharField(null=False)
     interaction_fingerprint = CharField(null=False)
 
     class Meta:

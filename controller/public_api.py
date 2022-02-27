@@ -27,13 +27,6 @@ async def vods():
     return get_vods()
 
 
-
-@app_public.post("/stats")
-async def stats(stat: StatViewModel):
-    return compute_stat(stat)
-
-
-
 @app_public.get("/stats")
 async def stats():
     return get_stats()

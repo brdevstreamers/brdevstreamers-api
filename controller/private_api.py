@@ -1,12 +1,14 @@
 from http.client import HTTPException
 import json
 from urllib.request import Request, urlopen
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from dotenv import dotenv_values
 from jose import jwt
 from starlette.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from model.user_model import User
+from service.stats_service import compute_stat
+from view_model.user_interaction_viewmodel import StatViewModel
 from view_model.user_viewmodel import UserViewModel
 
 
@@ -29,10 +31,7 @@ AUTH0_DOMAIN = 'zapperson.us.auth0.com'
 API_AUDIENCE = "BrStreamersApi"
 ALGORITHMS = ["RS256"]
 
-
-@app_private.middleware("http")
-async def verify_user_agent(request: Request, call_next):
-    token = request.headers['Authorization']
+def decode_jwt(token: str):
     token = token.split(" ")[1]
     jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
     jwks = json.loads(jsonurl.read())
@@ -64,10 +63,15 @@ async def verify_user_agent(request: Request, call_next):
             except Exception:
                 raise HTTPException(status_code=401, detail="invalid_header")
     if payload is not None:
-            response = await call_next(request)
-            return response
+            return payload
     raise HTTPException(status_code=401, detail="invalid_header")
 
+@app_private.middleware("http")
+async def verify_user_agent(request: Request, call_next):
+    token = request.headers['Authorization']
+    payload = decode_jwt(token)
+    response = await call_next(request)
+    return response
 
 
 
@@ -81,46 +85,70 @@ async def get_users():
 
 
 @app_private.get("/user/{user_login}")
-async def user(user_login: str):
+async def user(user_login: str, Authorization = Header(...)):
     try:
-        return User.select().where(User.user_login == user_login).get()
+        token = decode_jwt(Authorization)
+        nickname = token['https://brstreamers.dev/nickname']
+        if(nickname == user_login):
+            streamer = User.select().where(User.user_login == user_login).get()
+            return streamer
+        
+        raise HTTPException(status_code=403, detail="Unauthorized")
     except:
         raise HTTPException(status_code=404, detail="Streamer not found")
 
 
 @app_private.post("/user")
-async def save_user(user: UserViewModel):
-    return User.create(
-        user_login=user.user_login,
-        email=user.email,
-        bio=user.bio,
-        discord = user.discord,
-        instagram = user.instagram,
-        linkedin = user.linkedin,
-        github = user.github,
-        twitter = user.twitter)
+async def save_user(user: UserViewModel, Authorization = Header(...)):
+    token = decode_jwt(Authorization)
+    nickname = token['https://brstreamers.dev/nickname']
+
+    if(nickname == user.user_login):    
+        return User.create(
+            user_login=user.user_login,
+            email=user.email,
+            bio=user.bio,
+            discord = user.discord,
+            instagram = user.instagram,
+            linkedin = user.linkedin,
+            github = user.github,
+            twitter = user.twitter)
+    raise HTTPException(status_code=403, detail="Unauthorized")  
         
 
 @app_private.put("/user")
-async def update_user(user: UserViewModel):
-    res = (User
-       .update({User.instagram: user.instagram,
-                User.linkedin: user.linkedin,
-                User.github: user.github,
-                User.twitter: user.twitter,
-                User.discord: user.discord,
-                User.bio: user.bio
-                })
-       .where(User.user_login == user.user_login)
-       .execute())
-    return res
-        
+async def update_user(user: UserViewModel, Authorization = Header(...)):
+    token = decode_jwt(Authorization)
+    nickname = token['https://brstreamers.dev/nickname']
+
+    if(nickname == user.user_login):    
+        res = (User
+        .update({User.instagram: user.instagram,
+                    User.linkedin: user.linkedin,
+                    User.github: user.github,
+                    User.twitter: user.twitter,
+                    User.discord: user.discord,
+                    User.bio: user.bio
+                    })
+        .where(User.user_login == user.user_login)
+        .execute())
+        return res
+    raise HTTPException(status_code=403, detail="Unauthorized")  
 
 @app_private.delete("/user/{user_login}")
-async def delete_streamer(user_login):
+async def delete_streamer(user_login, Authorization = Header(...)):
+    token = decode_jwt(Authorization)
+    nickname = token['https://brstreamers.dev/nickname']
     try:
-        user = User.delete().where(User.user_login == user_login).execute()
-        return user
+        if(nickname == user_login):
+            user = User.delete().where(User.user_login == user_login).execute()
+            return user
+        raise HTTPException(status_code=403, detail="Unauthorized")  
+
     except:
         raise HTTPException(status_code=404, detail="Streamer not found")
 
+
+@app_private.post("/userinteraction")
+async def stats(stat: StatViewModel):
+    return compute_stat(stat)

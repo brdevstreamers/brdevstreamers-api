@@ -35,10 +35,10 @@ def get_stats_summary():
     return None
 
 def compute_stat(stat: UserInteraction):
-    # db_stat = Stat.select().where(Stat.user_login == stat.user_login, 
-    #     Stat.type == stat.type,
-    #     Stat.access_date == stat.access_date,
-    #     Stat.fingerprint == stat.fingerprint).count()
-    # if db_stat == 0:
-    #     return Stat.create(user_login=stat.user_login, access_date=stat.access_date, type=stat.type, fingerprint=stat.fingerprint)
+    db_stat = UserInteraction.select().where(UserInteraction.user_login == stat.user_login, 
+        UserInteraction.type == stat.type,
+        UserInteraction.date == stat.date,
+        UserInteraction.interaction_fingerprint == stat.interaction_fingerprint).count()
+    if db_stat == 0:
+        return UserInteraction.create(user_login=stat.user_login, date=stat.date, interaction_fingerprint=stat.interaction_fingerprint)
     return None
