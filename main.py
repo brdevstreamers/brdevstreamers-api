@@ -1,5 +1,5 @@
 
-from model.initializer import init_db
+from model.initializer import init_db, migrate_db
 from dotenv import dotenv_values
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,6 +12,7 @@ from view_model.user_viewmodel import UserViewModel
 config = dotenv_values(".env")
 
 init_db()
+migrate_db()
 
 origins = ["*"]
 

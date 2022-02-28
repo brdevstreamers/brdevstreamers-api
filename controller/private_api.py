@@ -6,6 +6,7 @@ from dotenv import dotenv_values
 from jose import jwt
 from starlette.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
+from model.user_interaction_model import UserInteraction
 from model.user_model import User
 from service.stats_service import compute_stat
 from view_model.user_interaction_viewmodel import  UserInteractionViewModel
@@ -155,4 +156,18 @@ async def stats(stat: UserInteractionViewModel, Authorization = Header(...)):
     nickname = token['https://brstreamers.dev/nickname']
     if(nickname == stat.user_login):
         return compute_stat(stat)
+    raise HTTPException(status_code=403, detail="Unauthorized")  
+
+
+    
+@app_private.get("/userinteraction/{user_login}")
+async def stats(user_login, Authorization = Header(...)):
+    token = decode_jwt(Authorization)
+    nickname = token['https://brstreamers.dev/nickname']
+    if(nickname == user_login):
+        user_interactions = UserInteraction.select().where(UserInteraction.user_login == user_login).execute()
+        data = []
+        for interaction in user_interactions:
+            data.append(interaction.__data__)
+        return data
     raise HTTPException(status_code=403, detail="Unauthorized")  

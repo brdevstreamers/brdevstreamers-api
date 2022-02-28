@@ -13,3 +13,18 @@ def init_db():
     db.connect()
     db.create_tables([User, UserInteraction, Reward])
     db.close()
+
+def migrate_db():
+    migrator = SqliteMigrator(db)
+    db.connect()
+
+    try:
+        target_user = CharField(null=True)
+        migrate(
+            migrator.add_column('userinteraction', 'target_user', target_user),
+        ) 
+    except:
+        pass
+    finally:
+        db.close()
+        print("Migration complete")

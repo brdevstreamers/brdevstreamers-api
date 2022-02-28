@@ -8,11 +8,11 @@ db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
 
 def get_stats():
     cursor = db.execute_sql(
-        "SELECT distinct s.user_login, " +
-"(SELECT count(*) FROM userinteraction WHERE user_login = s.user_login AND type = 'STREAM_CLICK')," +
-"(SELECT count(*) FROM userinteraction WHERE user_login = s.user_login AND type = 'VOD_CLICK')," +
-"(SELECT count(*) FROM userinteraction WHERE user_login = s.user_login AND type = 'PREVIEW_CLICK')" +
-"FROM userinteraction s ORDER BY s.user_login")
+        "SELECT distinct s.target_user, " +
+"(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'STREAM_CLICK')," +
+"(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'VOD_CLICK')," +
+"(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'PREVIEW_CLICK')" +
+"FROM userinteraction s ORDER BY s.target_user")
 
     stats = []
 
@@ -34,10 +34,10 @@ def get_stats_summary():
     return stats_summary
 
 def compute_stat(stat: UserInteraction):
-    db_stat = UserInteraction.select().where(UserInteraction.user_login == stat.user_login, 
+    db_stat = UserInteraction.select().where(UserInteraction.target_user == stat.target_user, 
         UserInteraction.type == stat.type,
         UserInteraction.date == stat.date,
         UserInteraction.interaction_fingerprint == stat.interaction_fingerprint).count()
     if db_stat == 0:
-        return UserInteraction.create(user_login=stat.user_login, date=stat.date, type=stat.type, interaction_fingerprint=stat.interaction_fingerprint)
+        return UserInteraction.create(user_login=stat.user_login, date=stat.date, target_user=stat.target_user, type=stat.type, interaction_fingerprint=stat.interaction_fingerprint)
     return None
