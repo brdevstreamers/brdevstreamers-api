@@ -17,7 +17,7 @@ app_public.add_middleware(
     allow_headers=["*"],
 )
 
-@app_public.get("/")
+@app_public.get("/streams")
 async def root():
     return get_streamers()
 

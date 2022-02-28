@@ -15,6 +15,7 @@ def get_streamers():
     streams = twitch.get_streams(language="pt", game_id=game_id)
  
     streams_model = []
+    stream_users = []
     for s in streams['data']:
         stream = {}
         stream['id'] = s['id']
@@ -30,18 +31,18 @@ def get_streamers():
         stream['profile_image_url'] = streamer['profile_image_url']
         stream['description'] = streamer['description'][:100] + '...'
 
-        try:
-            streamer_model = User.select().where(User.user_login == s['user_login']).get()
-            stream['github_url'] = streamer_model.github
-            stream['twitter_url'] = streamer_model.twitter
-            stream['instagram_url'] = streamer_model.instagram
-            stream['linkedin_url'] = streamer_model.linkedin
-            stream['discord_url'] = streamer_model.discord
-            stream['bio'] = streamer_model.bio
-        except:
-            print('User Not Found')
-        finally:
-            streams_model.append(stream)
+        stream_users.append(s['user_login'])
+        streams_model.append(stream)
+
+    streamers = User.select().where(User.user_login << stream_users).execute()
+    for s in streamers:
+        stream['github_url'] = s.github
+        stream['twitter_url'] = s.twitter
+        stream['instagram_url'] = s.instagram
+        stream['linkedin_url'] = s.linkedin
+        stream['discord_url'] = s.discord
+        stream['bio'] = s.bio
+
 
     shuffle(streams_model)
     return streams_model
@@ -55,6 +56,8 @@ def get_vods():
     game_id = games['data'][0]['id']
     vods = twitch.get_videos(language="pt", game_id=game_id, period=TimePeriod.DAY)
     vods_model = []
+    vod_users = []
+
     for s in vods['data']:
         if is_long_enough(s['duration']):
             stream = {}
@@ -72,18 +75,17 @@ def get_vods():
             stream['profile_image_url'] = streamer['profile_image_url']
             stream['description'] = streamer['description'][:100] + '...'
 
-            try:
-                streamer_model = User.select().where(User.user_login == s['user_login']).get()
-                stream['github_url'] = streamer_model.github
-                stream['twitter_url'] = streamer_model.twitter
-                stream['instagram_url'] = streamer_model.instagram
-                stream['linkedin_url'] = streamer_model.linkedin
-                stream['discord_url'] = streamer_model.discord
-                stream['bio'] = streamer_model.bio
-            except:
-                print(f'User Not Found: {s["user_login"]}')
-            finally:
-                vods_model.append(stream)
+            vod_users.append(s['user_login'])
+            vods_model.append(stream)
+
+    streamers = User.select().where(User.user_login << vod_users).execute()
+    for s in streamers:
+        stream['github_url'] = s.github
+        stream['twitter_url'] = s.twitter
+        stream['instagram_url'] = s.instagram
+        stream['linkedin_url'] = s.linkedin
+        stream['discord_url'] = s.discord
+        stream['bio'] = s.bio
 
     return vods_model
 
