@@ -3,7 +3,7 @@ from service.stats_service import get_stats, get_stats_summary, compute_stat
 from service.streamer_service import get_streamers, get_vods
 from fastapi.middleware.cors import CORSMiddleware
 
-from view_model.user_interaction_viewmodel import StatViewModel
+from view_model.user_interaction_viewmodel import UserInteractionViewModel
 
 origins = ["*"]
 

@@ -9,10 +9,10 @@ db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
 def get_stats():
     cursor = db.execute_sql(
         "SELECT distinct s.user_login, " +
-"(SELECT count(*) FROM stat WHERE user_login = s.user_login AND type = 'STREAM')," +
-"(SELECT count(*) FROM stat WHERE user_login = s.user_login AND type = 'VOD')," +
-"(SELECT count(*) FROM stat WHERE user_login = s.user_login AND type = 'PREVIEW')" +
-"FROM stat s ORDER BY s.user_login")
+"(SELECT count(*) FROM userinteraction WHERE user_login = s.user_login AND type = 'STREAM_CLICK')," +
+"(SELECT count(*) FROM userinteraction WHERE user_login = s.user_login AND type = 'VOD_CLICK')," +
+"(SELECT count(*) FROM userinteraction WHERE user_login = s.user_login AND type = 'PREVIEW_CLICK')" +
+"FROM userinteraction s ORDER BY s.user_login")
 
     stats = []
 
@@ -27,12 +27,11 @@ def get_stats():
     return stats
        
 def get_stats_summary():
-    # streams = Stat.select().where(Stat.type == 'STREAM').count()
-    # vods = Stat.select().where(Stat.type == 'VOD').count()
-    # previews = Stat.select().where(Stat.type == 'PREVIEW').count()
-    # stats_summary = {"streams": streams, "vods": vods, "previews": previews}
-    # return stats_summary
-    return None
+    streams = UserInteraction.select().where(UserInteraction.type == 'STREAM_CLICK').count()
+    vods = UserInteraction.select().where(UserInteraction.type == 'VOD_CLICK').count()
+    previews = UserInteraction.select().where(UserInteraction.type == 'PREVIEW').count()
+    stats_summary = {"streams": streams, "vods": vods, "previews": previews}
+    return stats_summary
 
 def compute_stat(stat: UserInteraction):
     db_stat = UserInteraction.select().where(UserInteraction.user_login == stat.user_login, 
@@ -40,5 +39,5 @@ def compute_stat(stat: UserInteraction):
         UserInteraction.date == stat.date,
         UserInteraction.interaction_fingerprint == stat.interaction_fingerprint).count()
     if db_stat == 0:
-        return UserInteraction.create(user_login=stat.user_login, date=stat.date, interaction_fingerprint=stat.interaction_fingerprint)
+        return UserInteraction.create(user_login=stat.user_login, date=stat.date, type=stat.type, interaction_fingerprint=stat.interaction_fingerprint)
     return None

@@ -4,7 +4,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
-class StatViewModel(BaseModel):
+class UserInteractionViewModel(BaseModel):
     user_login:str
     target_user:Optional[str]
     date: datetime

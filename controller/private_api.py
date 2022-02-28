@@ -8,7 +8,7 @@ from starlette.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from model.user_model import User
 from service.stats_service import compute_stat
-from view_model.user_interaction_viewmodel import StatViewModel
+from view_model.user_interaction_viewmodel import  UserInteractionViewModel
 from view_model.user_viewmodel import UserViewModel
 
 
@@ -150,5 +150,9 @@ async def delete_streamer(user_login, Authorization = Header(...)):
 
 
 @app_private.post("/userinteraction")
-async def stats(stat: StatViewModel):
-    return compute_stat(stat)
+async def stats(stat: UserInteractionViewModel, Authorization = Header(...)):
+    token = decode_jwt(Authorization)
+    nickname = token['https://brstreamers.dev/nickname']
+    if(nickname == stat.user_login):
+        return compute_stat(stat)
+    raise HTTPException(status_code=403, detail="Unauthorized")  

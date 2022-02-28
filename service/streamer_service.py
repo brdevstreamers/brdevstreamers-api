@@ -36,12 +36,17 @@ def get_streamers():
 
     streamers = User.select().where(User.user_login << stream_users).execute()
     for s in streamers:
-        stream['github_url'] = s.github
-        stream['twitter_url'] = s.twitter
-        stream['instagram_url'] = s.instagram
-        stream['linkedin_url'] = s.linkedin
-        stream['discord_url'] = s.discord
-        stream['bio'] = s.bio
+        for stream in streams_model:
+            if(stream['user_login'] == s.user_login):
+                stream['github_url'] = s.github
+                stream['twitter_url'] = s.twitter
+                stream['instagram_url'] = s.instagram
+                stream['linkedin_url'] = s.linkedin
+                stream['discord_url'] = s.discord
+                stream['bio'] = s.bio
+                break
+    
+       
 
 
     shuffle(streams_model)
@@ -80,12 +85,15 @@ def get_vods():
 
     streamers = User.select().where(User.user_login << vod_users).execute()
     for s in streamers:
-        stream['github_url'] = s.github
-        stream['twitter_url'] = s.twitter
-        stream['instagram_url'] = s.instagram
-        stream['linkedin_url'] = s.linkedin
-        stream['discord_url'] = s.discord
-        stream['bio'] = s.bio
+        for stream in vods_model:
+            if(stream['user_login'] == s.user_login):
+                stream['github_url'] = s.github
+                stream['twitter_url'] = s.twitter
+                stream['instagram_url'] = s.instagram
+                stream['linkedin_url'] = s.linkedin
+                stream['discord_url'] = s.discord
+                stream['bio'] = s.bio
+                break
 
     return vods_model
 
