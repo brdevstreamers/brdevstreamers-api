@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from service.stats_service import get_stats, get_stats_summary, compute_stat
-from service.streamer_service import get_streamers, get_vods
+from service.twitch_service import get_streamers, get_tags, get_vods
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 
 from view_model.stream_viewmodel import StreamViewModel
+from view_model.tag_viewmodel import TagViewModel
 from view_model.vod_viewmodel import VodViewModel
 from view_model.stats_viewmodel import StatsViewModel
 
@@ -33,7 +34,11 @@ async def vods():
 @app_public.get("/stats", response_model=List[StatsViewModel])
 async def stats():
     return get_stats()
-    
+
+
+@app_public.get("/tags", response_model=List[TagViewModel])
+async def tags():
+    return get_tags()
 
 @app_public.get("/stats/summary")
 async def stats_summary():
