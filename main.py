@@ -7,8 +7,6 @@ import uvicorn
 from controller.public_api import app_public
 from controller.private_api import app_private
 
-from view_model.user_viewmodel import UserViewModel
-
 config = dotenv_values(".env")
 
 init_db()
