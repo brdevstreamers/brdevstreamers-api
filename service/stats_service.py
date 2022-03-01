@@ -1,29 +1,30 @@
 from peewee import *
 from dotenv import dotenv_values
-
+from typing import List
 from model.user_interaction_model import UserInteraction
+from view_model.stats_viewmodel import StatsViewModel
+
 config = dotenv_values(".env")
 
 db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
 
-def get_stats():
+def get_stats() -> List[StatsViewModel]:
     cursor = db.execute_sql(
         "SELECT distinct s.target_user, " +
-"(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'STREAM_CLICK')," +
-"(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'VOD_CLICK')," +
-"(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'PREVIEW_CLICK')" +
-"FROM userinteraction s ORDER BY s.target_user")
+        "(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'STREAM_CLICK')," +
+        "(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'VOD_CLICK')," +
+        "(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'PREVIEW_CLICK')" +
+        "FROM userinteraction s ORDER BY s.target_user")
 
-    stats = []
+    stats: List[StatsViewModel] = []
 
     for row in cursor.fetchall():
-        stat = {}
-        stat['user_login'] = row[0]
-        stat['stream_clicks'] = row[1]
-        stat['vod_clicks'] = row[2]
-        stat['preview_clicks'] = row[3]
+        stat = StatsViewModel()
+        stat.user_login = row[0]
+        stat.stream_clicks = row[1]
+        stat.vod_clicks = row[2]
+        stat.preview_clicks = row[3]
         stats.append(stat)
-
     return stats
        
 def get_stats_summary():

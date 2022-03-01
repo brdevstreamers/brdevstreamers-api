@@ -1,7 +1,7 @@
 from typing import Optional
-from view_model.user_viewmodel import UserViewModel
+from view_model.user_viewmodel import UserOutViewModel
 
-class VodViewModel(UserViewModel):
+class VodViewModel(UserOutViewModel):
     id: Optional[str]
     user_id: Optional[str]
     user_name: Optional[str]
