@@ -109,11 +109,11 @@ async def save_user(user: UserViewModel, Authorization = Header(...)):
             user_login=user.user_login,
             email=user.email,
             bio=user.bio,
-            discord = user.discord,
-            instagram = user.instagram,
-            linkedin = user.linkedin,
-            github = user.github,
-            twitter = user.twitter)
+            discord = user.discord_url,
+            instagram = user.instagram_url,
+            linkedin = user.linkedin_url,
+            github = user.github_url,
+            twitter = user.twitter_url)
     raise HTTPException(status_code=403, detail="Unauthorized")  
         
 
@@ -124,11 +124,11 @@ async def update_user(user: UserViewModel, Authorization = Header(...)):
 
     if(nickname == user.user_login):    
         res = (User
-        .update({User.instagram: user.instagram,
-                    User.linkedin: user.linkedin,
-                    User.github: user.github,
-                    User.twitter: user.twitter,
-                    User.discord: user.discord,
+        .update({User.instagram: user.instagram_url,
+                    User.linkedin: user.linkedin_url,
+                    User.github: user.github_url,
+                    User.twitter: user.twitter_url,
+                    User.discord: user.discord_url,
                     User.bio: user.bio
                     })
         .where(User.user_login == user.user_login)

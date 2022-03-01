@@ -2,8 +2,10 @@ from fastapi import FastAPI
 from service.stats_service import get_stats, get_stats_summary, compute_stat
 from service.streamer_service import get_streamers, get_vods
 from fastapi.middleware.cors import CORSMiddleware
-
+from typing import List
 from view_model.user_interaction_viewmodel import UserInteractionViewModel
+from view_model.stream_viewmodel import StreamViewModel
+from view_model.vod_viewmodel import VodViewModel
 
 origins = ["*"]
 
@@ -17,12 +19,12 @@ app_public.add_middleware(
     allow_headers=["*"],
 )
 
-@app_public.get("/streams")
+@app_public.get("/streams", response_model=List[StreamViewModel])
 async def root():
     return get_streamers()
 
 
-@app_public.get("/vods")
+@app_public.get("/vods", response_model=List[VodViewModel])
 async def vods():
     return get_vods()
 
