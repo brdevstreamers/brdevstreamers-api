@@ -17,6 +17,7 @@ pygithub = "*"
 peewee = "*"
 python-jose = {extras = ["cryptography"],version = "*"}
 aioredis = "*"
+brotli-asgi = "*"
 
 [requires]
 python_version = "3.7"

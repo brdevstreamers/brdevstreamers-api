@@ -8,6 +8,7 @@ from controller.public_api import app_public
 from controller.private_api import app_private
 
 from view_model.user_viewmodel import UserViewModel
+from fastapi.middleware.gzip import GZipMiddleware
 
 config = dotenv_values(".env")
 
@@ -29,6 +30,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_middleware(GZipMiddleware)
 
 if __name__ == '__main__':
     if(config["ENV"] == 'prod'):
