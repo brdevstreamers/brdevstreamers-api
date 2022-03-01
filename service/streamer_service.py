@@ -13,9 +13,7 @@ config = dotenv_values(".env")
 twitch = Twitch(config['CLIENT_ID'], config['CLIENT_SECRET'])
 
 def get_streamers() -> List[StreamViewModel]:
-    games = twitch.get_games(names=['Software and Game Development'])
-    game_id = games['data'][0]['id']
-    streams = twitch.get_streams(language="pt", game_id=game_id)
+    streams = twitch.get_streams(language="pt", game_id='1469308723')
  
     streams_model: List[StreamViewModel] = []
     stream_users = []
@@ -56,9 +54,7 @@ def get_streamer(id):
     
 
 def get_vods() -> List[VodViewModel]:
-    games = twitch.get_games(names=['Software and Game Development'])
-    game_id = games['data'][0]['id']
-    vods = twitch.get_videos(language="pt", game_id=game_id, period=TimePeriod.DAY)
+    vods = twitch.get_videos(language="pt", game_id='1469308723', period=TimePeriod.DAY)
     vods_model: List[VodViewModel] = []
     vod_users = []
 
