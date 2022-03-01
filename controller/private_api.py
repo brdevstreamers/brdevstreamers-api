@@ -10,7 +10,7 @@ from model.user_interaction_model import UserInteraction
 from model.user_model import User
 from service.stats_service import compute_stat
 from view_model.user_interaction_viewmodel import  UserInteractionViewModel
-from view_model.user_viewmodel import UserViewModel
+from view_model.user_viewmodel import UpdateUserViewModel
 
 
 origins = ["*"]
@@ -100,7 +100,7 @@ async def user(user_login: str, Authorization = Header(...)):
 
 
 @app_private.post("/user")
-async def save_user(user: UserViewModel, Authorization = Header(...)):
+async def save_user(user: UpdateUserViewModel, Authorization = Header(...)):
     token = decode_jwt(Authorization)
     nickname = token['https://brstreamers.dev/nickname']
 
@@ -109,26 +109,26 @@ async def save_user(user: UserViewModel, Authorization = Header(...)):
             user_login=user.user_login,
             email=user.email,
             bio=user.bio,
-            discord = user.discord_url,
-            instagram = user.instagram_url,
-            linkedin = user.linkedin_url,
-            github = user.github_url,
-            twitter = user.twitter_url)
+            discord = user.discord,
+            instagram = user.instagram,
+            linkedin = user.linkedin,
+            github = user.github,
+            twitter = user.twitter)
     raise HTTPException(status_code=403, detail="Unauthorized")  
         
 
 @app_private.put("/user")
-async def update_user(user: UserViewModel, Authorization = Header(...)):
+async def update_user(user: UpdateUserViewModel, Authorization = Header(...)):
     token = decode_jwt(Authorization)
     nickname = token['https://brstreamers.dev/nickname']
 
     if(nickname == user.user_login):    
         res = (User
-        .update({User.instagram: user.instagram_url,
-                    User.linkedin: user.linkedin_url,
-                    User.github: user.github_url,
-                    User.twitter: user.twitter_url,
-                    User.discord: user.discord_url,
+        .update({User.instagram: user.instagram,
+                    User.linkedin: user.linkedin,
+                    User.github: user.github,
+                    User.twitter: user.twitter,
+                    User.discord: user.discord,
                     User.bio: user.bio
                     })
         .where(User.user_login == user.user_login)
