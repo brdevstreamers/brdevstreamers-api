@@ -52,7 +52,6 @@ def get_streamers() -> List[StreamViewModel]:
 def get_streamer(id):
     return twitch.get_users(user_ids=[id])['data'][0]
     
-
 def get_vods() -> List[VodViewModel]:
     vods = twitch.get_videos(language="pt", game_id='1469308723', period=TimePeriod.DAY)
     vods_model: List[VodViewModel] = []
