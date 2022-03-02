@@ -108,12 +108,12 @@ def get_tags() -> List[TagViewModel]:
     streams = twitch.get_streams(language="pt", game_id='1469308723')
     tag_ids = get_tag_list_from_streams(streams)
     tags = twitch.get_all_stream_tags(tag_ids=tag_ids)
-    tags_list = []
+    tags_dict = {}
     for tag in tags['data']:
         tag_model = TagViewModel(
             id=tag['tag_id'], name=tag['localization_names']['pt-br'])
-        tags_list.append(tag_model)
-    return tags_list
+        tags_dict[tag['tag_id']] = tag_model
+    return list(tags_dict.values())
 
 
 def get_tag_list_from_streams(streams):
