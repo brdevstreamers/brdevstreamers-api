@@ -1,4 +1,5 @@
 
+import aioredis
 from model.initializer import init_db
 from dotenv import dotenv_values
 from fastapi import FastAPI
@@ -7,6 +8,8 @@ import uvicorn
 from controller.public_api import app_public
 from controller.private_api import app_private
 from fastapi.middleware.gzip import GZipMiddleware
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
 
 config = dotenv_values(".env")
 
@@ -26,6 +29,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+async def startup():
+    redis =  aioredis.from_url(f"redis://{config['REDIS_HOST']}", encoding="utf8", decode_responses=True)
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    FastAPICache.clear()
+
 
 app.add_middleware(GZipMiddleware)
 

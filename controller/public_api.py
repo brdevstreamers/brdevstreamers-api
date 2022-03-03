@@ -3,6 +3,7 @@ from service.stats_service import get_stats, get_stats_summary, compute_stat
 from service.twitch_service import get_streamers, get_tags, get_vods
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
+from fastapi_cache.decorator import cache
 
 from view_model.stream_viewmodel import StreamViewModel
 from view_model.tag_viewmodel import TagViewModel
@@ -21,12 +22,15 @@ app_public.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app_public.get("/streams", response_model=List[StreamViewModel])
+@cache(expire=60)
 async def root():
     return get_streamers()
 
 
 @app_public.get("/vods", response_model=List[VodViewModel])
+@cache(expire=60)
 async def vods():
     return get_vods()
 
