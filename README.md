@@ -31,6 +31,19 @@ API_TOKEN= #token for private api (you choose here)
 DB= #sqlite db location
 ```
 
+
+## Set up the Postgres DB:
+
+```
+docker run -d \
+    --name some-postgres -p 5432:5432 \
+    -e POSTGRES_PASSWORD=$POSTGRES_PWD \
+    -e PGDATA=/var/lib/postgresql/data/pgdata \
+    -v /custom/mount:/var/lib/postgresql/data \
+    postgres
+```
+
+
 Then you can run:
 
 ### `pipenv install`

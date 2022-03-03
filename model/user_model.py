@@ -3,7 +3,8 @@ from peewee import *
 from dotenv import dotenv_values
 config = dotenv_values(".env")
 
-db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
+db = PostgresqlDatabase(config['DB_NAME'], user=config['DB_USER'],
+                           password=config['DB_PASS'], host=config['DB_HOST'], port=config['DB_PORT'])
 
 class User(Model):
     user_login = CharField(unique=True)

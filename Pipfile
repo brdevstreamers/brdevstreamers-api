@@ -18,6 +18,7 @@ peewee = "*"
 python-jose = {extras = ["cryptography"],version = "*"}
 aioredis = "*"
 brotli-asgi = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"

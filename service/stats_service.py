@@ -6,7 +6,8 @@ from view_model.stats_viewmodel import StatsViewModel
 
 config = dotenv_values(".env")
 
-db = SqliteDatabase(config["DB"] + "brdevstreamers.db")
+db = PostgresqlDatabase(config['DB_NAME'], user=config['DB_USER'],
+                           password=config['DB_PASS'], host=config['DB_HOST'], port=config['DB_PORT'])
 
 def get_stats() -> List[StatsViewModel]:
     cursor = db.execute_sql(
