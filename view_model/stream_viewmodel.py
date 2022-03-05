@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from view_model.user_viewmodel import UserOutViewModel
 
+
 class StreamViewModel(UserOutViewModel):
     id: Optional[str]
     user_id: Optional[str]

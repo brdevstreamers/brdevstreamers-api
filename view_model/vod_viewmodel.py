@@ -1,5 +1,7 @@
 from typing import Optional
+
 from view_model.user_viewmodel import UserOutViewModel
+
 
 class VodViewModel(UserOutViewModel):
     id: Optional[str]

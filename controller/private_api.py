@@ -1,17 +1,18 @@
-from http.client import HTTPException
 import json
+from http.client import HTTPException
 from urllib.request import Request, urlopen
-from fastapi import FastAPI, Header
+
 from dotenv import dotenv_values
+from fastapi import FastAPI, Header
+from fastapi.middleware.cors import CORSMiddleware
 from jose import jwt
 from starlette.responses import JSONResponse, Response
-from fastapi.middleware.cors import CORSMiddleware
+
 from model.user_interaction_model import UserInteraction
 from model.user_model import User
 from service.stats_service import compute_stat
-from view_model.user_interaction_viewmodel import  UserInteractionViewModel
+from view_model.user_interaction_viewmodel import UserInteractionViewModel
 from view_model.user_viewmodel import UpdateUserViewModel
-
 
 origins = ["*"]
 

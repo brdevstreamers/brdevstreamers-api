@@ -1,6 +1,8 @@
 from enum import unique
-from peewee import *
+
 from dotenv import dotenv_values
+from peewee import *
+
 config = dotenv_values(".env")
 
 db = PostgresqlDatabase(config['DB_NAME'], user=config['DB_USER'],

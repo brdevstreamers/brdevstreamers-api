@@ -1,5 +1,5 @@
-from github import Github
 from dotenv import dotenv_values
+from github import Github
 
 config = dotenv_values(".env")
 user_githubs = {}

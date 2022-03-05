@@ -1,5 +1,5 @@
-from twitter import *
 from dotenv import dotenv_values
+from twitter import *
 
 config = dotenv_values(".env")
 t = Twitter(
