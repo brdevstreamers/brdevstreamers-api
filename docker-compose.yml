@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:
+  app:
+    image: brdevstreamers-server:latest
+    container_name: brdevstreamers-server
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env
+    volumes:
+      - /home/brdevstreamers/letsencrypt:/etc/letsencrypt
+      - /home/brdevstreamers/db:/code/brstreamers
+    restart: always
+  postgres:
+    image: postgres:latest
+    container_name: some-postgres
+    environment:
+      POSTGRES_USER: brdevstreamers
+      POSTGRES_DB: brdevstreamers
+      POSTGRES_PASSWORD: ${POSTGRES_PWD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - /custom/mount:/var/lib/postgresql/data
+    restart: always
+  redis:
+    image: redis:latest
+    container_name: some-redis
+    environment:
+      REDIS_PASSWORD: ${REDIS_PWD}
+    volumes:
+      - /home/brdevstreamers/redis_db:/usr/local/etc/redis
+    restart: always
