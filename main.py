@@ -1,15 +1,16 @@
 
 import aioredis
-from model.initializer import init_db
+import uvicorn
 from dotenv import dotenv_values
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
-from controller.public_api import app_public
-from controller.private_api import app_private
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+
+from controller.private_api import app_private
+from controller.public_api import app_public
+from model.initializer import init_db
 
 config = dotenv_values(".env")
 

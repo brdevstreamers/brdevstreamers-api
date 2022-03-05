@@ -1,6 +1,8 @@
-from peewee import *
-from dotenv import dotenv_values
 from typing import List
+
+from dotenv import dotenv_values
+from peewee import *
+
 from model.user_interaction_model import UserInteraction
 from view_model.stats_viewmodel import StatsViewModel
 

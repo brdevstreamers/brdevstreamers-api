@@ -1,14 +1,15 @@
-from fastapi import FastAPI
-from service.stats_service import get_stats, get_stats_summary, compute_stat
-from service.twitch_service import get_streamers, get_tags, get_vods
-from fastapi.middleware.cors import CORSMiddleware
 from typing import List
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi_cache.decorator import cache
 
+from service.stats_service import compute_stat, get_stats, get_stats_summary
+from service.twitch_service import get_streamers, get_tags, get_vods
+from view_model.stats_viewmodel import StatsViewModel
 from view_model.stream_viewmodel import StreamViewModel
 from view_model.tag_viewmodel import TagViewModel
 from view_model.vod_viewmodel import VodViewModel
-from view_model.stats_viewmodel import StatsViewModel
 
 origins = ["*"]
 

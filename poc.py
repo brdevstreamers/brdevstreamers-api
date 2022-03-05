@@ -1,5 +1,6 @@
-from twitchAPI.twitch import Twitch
 from dotenv import dotenv_values
+from twitchAPI.twitch import Twitch
+
 config = dotenv_values(".env")
 
 

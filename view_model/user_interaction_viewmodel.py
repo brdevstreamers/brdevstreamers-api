@@ -1,6 +1,7 @@
+from datetime import datetime
 from typing import Optional
 from xmlrpc.client import DateTime
-from datetime import datetime
+
 from pydantic import BaseModel
 
 
