@@ -39,17 +39,20 @@ def get_streamers() -> List[StreamViewModel]:
         stream_users.append(s['user_login'])
         streams_model.append(stream)
 
-    streamers = User.select().where(User.user_login << stream_users).execute()
-    for s in streamers:
-        for stream in streams_model:
-            if(stream.user_login == s.user_login):
-                stream.github_url = s.github
-                stream.twitter_url = s.twitter
-                stream.instagram_url = s.instagram
-                stream.linkedin_url = s.linkedin
-                stream.discord_url = s.discord
-                stream.bio = s.bio
-                break
+    try:
+        streamers = User.select().where(User.user_login << stream_users).execute()
+        for s in streamers:
+            for stream in streams_model:
+                if(stream.user_login == s.user_login):
+                    stream.github_url = s.github
+                    stream.twitter_url = s.twitter
+                    stream.instagram_url = s.instagram
+                    stream.linkedin_url = s.linkedin
+                    stream.discord_url = s.discord
+                    stream.bio = s.bio
+                    break
+    except Exception as e:
+        print(e)
     shuffle(streams_model)
     return streams_model
 
@@ -84,19 +87,20 @@ def get_vods() -> List[VodViewModel]:
 
             vod_users.append(s['user_login'])
             vods_model.append(stream)
-
-    streamers = User.select().where(User.user_login << vod_users).execute()
-    for s in streamers:
-        for stream in vods_model:
-            if(stream.user_login == s.user_login):
-                stream.github_url = s.github
-                stream.twitter_url = s.twitter
-                stream.instagram_url = s.instagram
-                stream.linkedin_url = s.linkedin
-                stream.discord_url = s.discord
-                stream.bio = s.bio
-                break
-
+    try:
+        streamers = User.select().where(User.user_login << vod_users).execute()
+        for s in streamers:
+            for stream in vods_model:
+                if(stream.user_login == s.user_login):
+                    stream.github_url = s.github
+                    stream.twitter_url = s.twitter
+                    stream.instagram_url = s.instagram
+                    stream.linkedin_url = s.linkedin
+                    stream.discord_url = s.discord
+                    stream.bio = s.bio
+                    break
+    except Exception as e:
+        print(e)
     return vods_model
 
 
