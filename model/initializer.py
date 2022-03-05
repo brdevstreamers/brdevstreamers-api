@@ -13,6 +13,6 @@ db = PostgresqlDatabase(config['DB_NAME'], user=config['DB_USER'],
 
 
 def init_db():
-    db.connect()
+    db.connect(reuse_if_open=True)
     db.create_tables([User, UserInteraction, Reward])
     db.close()

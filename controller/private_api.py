@@ -10,6 +10,7 @@ from starlette.responses import JSONResponse, Response
 
 from model.user_interaction_model import UserInteraction
 from model.user_model import User
+
 from service.stats_service import compute_stat
 from view_model.user_interaction_viewmodel import UserInteractionViewModel
 from view_model.user_viewmodel import UpdateUserViewModel
@@ -32,6 +33,7 @@ app_private.add_middleware(
 AUTH0_DOMAIN = 'zapperson.us.auth0.com'
 API_AUDIENCE = "BrStreamersApi"
 ALGORITHMS = ["RS256"]
+
 
 def decode_jwt(token: str):
     token = token.split(" ")[1]
@@ -61,12 +63,13 @@ def decode_jwt(token: str):
                 raise HTTPException(status_code=401, detail="token_expired")
             except jwt.JWTClaimsError:
                 raise HTTPException(status_code=404, detail="invalid_claims")
-                
+
             except Exception:
                 raise HTTPException(status_code=401, detail="invalid_header")
     if payload is not None:
             return payload
     raise HTTPException(status_code=401, detail="invalid_header")
+
 
 @app_private.middleware("http")
 async def verify_user_agent(request: Request, call_next):
@@ -80,7 +83,7 @@ async def verify_user_agent(request: Request, call_next):
 @app_private.get("/users")
 async def get_users():
     try:
-        streamers = User.select().get()
+        streamers = get_users()
         return streamers
     except:
         raise HTTPException(status_code=404, detail="Users not found")
@@ -92,7 +95,7 @@ async def user(user_login: str, Authorization = Header(...)):
         token = decode_jwt(Authorization)
         nickname = token['https://brstreamers.dev/nickname']
         if(nickname == user_login):
-            streamer = User.select().where(User.user_login == user_login).get()
+            streamer = get_user_by_login(user_login)
             return streamer
         
         raise HTTPException(status_code=403, detail="Unauthorized")
@@ -106,15 +109,7 @@ async def save_user(user: UpdateUserViewModel, Authorization = Header(...)):
     nickname = token['https://brstreamers.dev/nickname']
 
     if(nickname == user.user_login):    
-        return User.create(
-            user_login=user.user_login,
-            email=user.email,
-            bio=user.bio,
-            discord = user.discord,
-            instagram = user.instagram,
-            linkedin = user.linkedin,
-            github = user.github,
-            twitter = user.twitter)
+        return create_user_model(user)
     raise HTTPException(status_code=403, detail="Unauthorized")  
         
 
@@ -124,16 +119,7 @@ async def update_user(user: UpdateUserViewModel, Authorization = Header(...)):
     nickname = token['https://brstreamers.dev/nickname']
 
     if(nickname == user.user_login):    
-        res = (User
-        .update({User.instagram: user.instagram,
-                    User.linkedin: user.linkedin,
-                    User.github: user.github,
-                    User.twitter: user.twitter,
-                    User.discord: user.discord,
-                    User.bio: user.bio
-                    })
-        .where(User.user_login == user.user_login)
-        .execute())
+        res = update_user_model(user)
         return res
     raise HTTPException(status_code=403, detail="Unauthorized")  
 
@@ -143,7 +129,7 @@ async def delete_streamer(user_login, Authorization = Header(...)):
     nickname = token['https://brstreamers.dev/nickname']
     try:
         if(nickname == user_login):
-            user = User.delete().where(User.user_login == user_login).execute()
+            user = delete_user(user_login)
             return user
         raise HTTPException(status_code=403, detail="Unauthorized")  
 
@@ -166,7 +152,7 @@ async def stats(user_login, Authorization = Header(...)):
     token = decode_jwt(Authorization)
     nickname = token['https://brstreamers.dev/nickname']
     if(nickname == user_login):
-        user_interactions = UserInteraction.select().where(UserInteraction.user_login == user_login).execute()
+        user_interactions = get_user_interactions_by_user_login(user_login)
         data = []
         for interaction in user_interactions:
             data.append(interaction.__data__)

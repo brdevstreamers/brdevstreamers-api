@@ -6,6 +6,7 @@ from twitchAPI.twitch import Twitch
 from twitchAPI.types import TimePeriod
 
 from model.user_model import User
+from persistence.user_dao import get_users_by_name
 from service.github_service import has_github_account
 from service.twitter_service import has_twitter_account
 from view_model.stream_viewmodel import StreamViewModel
@@ -42,7 +43,7 @@ def get_streamers() -> List[StreamViewModel]:
         streams_model.append(stream)
 
     try:
-        streamers = User.select().where(User.user_login << stream_users).execute()
+        streamers = get_users_by_name(stream_users)
         for s in streamers:
             for stream in streams_model:
                 if(stream.user_login == s.user_login):
@@ -90,7 +91,7 @@ def get_vods() -> List[VodViewModel]:
             vod_users.append(s['user_login'])
             vods_model.append(stream)
     try:
-        streamers = User.select().where(User.user_login << vod_users).execute()
+        streamers = get_users_by_name(vod_users)
         for s in streamers:
             for stream in vods_model:
                 if(stream.user_login == s.user_login):
