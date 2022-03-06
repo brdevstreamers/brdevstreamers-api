@@ -10,6 +10,8 @@ from starlette.responses import JSONResponse, Response
 
 from model.user_interaction_model import UserInteraction
 from model.user_model import User
+from persistence.user_dao import create_user_model, delete_user, get_user_by_login, update_user_model
+from persistence.user_interaction_dao import get_user_interactions_by_user_login
 
 from service.stats_service import compute_stat
 from view_model.user_interaction_viewmodel import UserInteractionViewModel
