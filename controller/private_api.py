@@ -101,8 +101,8 @@ async def user(user_login: str, Authorization = Header(...)):
             return streamer
         
         raise HTTPException(status_code=403, detail="Unauthorized")
-    except:
-        raise HTTPException(status_code=404, detail="Streamer not found")
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=f"Streamer not found {e}")
 
 
 @app_private.post("/user")
