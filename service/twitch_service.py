@@ -7,8 +7,6 @@ from twitchAPI.types import TimePeriod
 
 from model.user_model import User
 from persistence.user_dao import get_users_by_name
-from service.github_service import has_github_account
-from service.twitter_service import has_twitter_account
 from view_model.stream_viewmodel import StreamViewModel
 from view_model.tag_viewmodel import TagViewModel
 from view_model.vod_viewmodel import VodViewModel

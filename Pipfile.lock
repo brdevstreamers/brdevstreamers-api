@@ -698,14 +698,6 @@
             "index": "pypi",
             "version": "==1.9.0"
         },
-        "pygithub": {
-            "hashes": [
-                "sha256:1bbfff9372047ff3f21d5cd8e07720f3dbfdaf6462fcaed9d815f528f1ba7283",
-                "sha256:2caf0054ea079b71e539741ae56c5a95e073b81fa472ce222e81667381b9601b"
-            ],
-            "index": "pypi",
-            "version": "==1.55"
-        },
         "pyjwt": {
             "hashes": [
                 "sha256:b888b4d56f06f6dcd777210c334e69c737be74755d3e5e9ee3fe67dc18a0ee41",
@@ -849,14 +841,6 @@
             ],
             "index": "pypi",
             "version": "==2.5.2"
-        },
-        "twitter": {
-            "hashes": [
-                "sha256:06eac7ee7f2a14ddeb680671ff07450984f6d254334f5db8dd69547dd1e179c5",
-                "sha256:a56ff9575fbd50a51ce91107dcb5a4c3fd00c2ba1bcb172ce538b0948d3626e6"
-            ],
-            "index": "pypi",
-            "version": "==1.19.3"
         },
         "typing-extensions": {
             "hashes": [
