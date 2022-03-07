@@ -1,5 +1,6 @@
 
 from dotenv import dotenv_values
+from peewee import PostgresqlDatabase, CharField, DateField, Model
 
 config = dotenv_values(".env")
 

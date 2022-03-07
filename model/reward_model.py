@@ -1,5 +1,5 @@
 from dotenv import dotenv_values
-
+from peewee import PostgresqlDatabase, CharField, IntegerField, Model
 config = dotenv_values(".env")
 
 db = PostgresqlDatabase(config['DB_NAME'], user=config['DB_USER'],
