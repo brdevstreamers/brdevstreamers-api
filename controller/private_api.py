@@ -38,39 +38,39 @@ ALGORITHMS = ["RS256"]
 
 
 def decode_jwt(token: str):
-    token = token.split(" ")[1]
-    jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
-    jwks = json.loads(jsonurl.read())
-    unverified_header = jwt.get_unverified_header(token)
-    rsa_key = {}
-    for key in jwks["keys"]:
-        if key["kid"] == unverified_header["kid"]:
-            rsa_key = {
-                "kty": key["kty"],
-                "kid": key["kid"],
-                "use": key["use"],
-                "n": key["n"],
-                "e": key["e"]
-            }
-    if rsa_key:
-            try:
-                payload = jwt.decode(
-                    token,
-                    rsa_key,
-                    algorithms=ALGORITHMS,
-                    audience=API_AUDIENCE,
-                    issuer="https://"+AUTH0_DOMAIN+"/"
-                )
-            except jwt.ExpiredSignatureError:
-                raise HTTPException(status_code=401, detail="token_expired")
-            except jwt.JWTClaimsError:
-                raise HTTPException(status_code=404, detail="invalid_claims")
+	token = token.split(" ")[1]
+	jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
+	jwks = json.loads(jsonurl.read())
+	unverified_header = jwt.get_unverified_header(token)
+	rsa_key = {}
+	for key in jwks["keys"]:
+		if key["kid"] == unverified_header["kid"]:
+			rsa_key = {
+				"kty": key["kty"],
+				"kid": key["kid"],
+				"use": key["use"],
+				"n": key["n"],
+				"e": key["e"]
+			}
+	if rsa_key:
+		try:
+			payload = jwt.decode(
+				token,
+				rsa_key,
+				algorithms=ALGORITHMS,
+				audience=API_AUDIENCE,
+				issuer="https://"+AUTH0_DOMAIN+"/"
+			)
+		except jwt.ExpiredSignatureError:
+			raise HTTPException(status_code=401, detail="token_expired")
+		except jwt.JWTClaimsError:
+			raise HTTPException(status_code=404, detail="invalid_claims")
 
-            except Exception:
-                raise HTTPException(status_code=401, detail="invalid_header")
-    if payload is not None:
-            return payload
-    raise HTTPException(status_code=401, detail="invalid_header")
+		except Exception:
+			raise HTTPException(status_code=401, detail="invalid_header")
+	if payload is not None:
+		return payload
+	raise HTTPException(status_code=401, detail="invalid_header")
 
 
 @app_private.middleware("http")

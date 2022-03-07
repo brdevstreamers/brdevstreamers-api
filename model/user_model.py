@@ -1,7 +1,5 @@
-from enum import unique
-
 from dotenv import dotenv_values
-from peewee import *
+
 
 config = dotenv_values(".env")
 

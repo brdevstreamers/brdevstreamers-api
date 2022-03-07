@@ -1,7 +1,4 @@
 from dotenv import dotenv_values
-from peewee import *
-from playhouse.migrate import *
-
 from model.reward_model import Reward
 from model.user_interaction_model import UserInteraction
 from model.user_model import User
