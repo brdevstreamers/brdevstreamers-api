@@ -74,3 +74,7 @@ pip install black
 # Run black linter
 black -l 100 -S .
 ```
+## Contributors
+<a href="https://github.com/Br-Dev-Streamers/brdevstreamers/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Br-Dev-Streamers/brdevstreamers" />
+</a>
