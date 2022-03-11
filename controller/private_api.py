@@ -10,6 +10,8 @@ from starlette.responses import JSONResponse, Response
 
 from model.user_interaction_model import UserInteraction
 from model.user_model import User
+from persistence.user_dao import create_user_model, delete_user, get_user_by_login, update_user_model
+from persistence.user_interaction_dao import get_user_interactions_by_user_login
 
 from service.stats_service import compute_stat
 from view_model.user_interaction_viewmodel import UserInteractionViewModel
@@ -36,39 +38,39 @@ ALGORITHMS = ["RS256"]
 
 
 def decode_jwt(token: str):
-    token = token.split(" ")[1]
-    jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
-    jwks = json.loads(jsonurl.read())
-    unverified_header = jwt.get_unverified_header(token)
-    rsa_key = {}
-    for key in jwks["keys"]:
-        if key["kid"] == unverified_header["kid"]:
-            rsa_key = {
-                "kty": key["kty"],
-                "kid": key["kid"],
-                "use": key["use"],
-                "n": key["n"],
-                "e": key["e"]
-            }
-    if rsa_key:
-            try:
-                payload = jwt.decode(
-                    token,
-                    rsa_key,
-                    algorithms=ALGORITHMS,
-                    audience=API_AUDIENCE,
-                    issuer="https://"+AUTH0_DOMAIN+"/"
-                )
-            except jwt.ExpiredSignatureError:
-                raise HTTPException(status_code=401, detail="token_expired")
-            except jwt.JWTClaimsError:
-                raise HTTPException(status_code=404, detail="invalid_claims")
+	token = token.split(" ")[1]
+	jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
+	jwks = json.loads(jsonurl.read())
+	unverified_header = jwt.get_unverified_header(token)
+	rsa_key = {}
+	for key in jwks["keys"]:
+		if key["kid"] == unverified_header["kid"]:
+			rsa_key = {
+				"kty": key["kty"],
+				"kid": key["kid"],
+				"use": key["use"],
+				"n": key["n"],
+				"e": key["e"]
+			}
+	if rsa_key:
+		try:
+			payload = jwt.decode(
+				token,
+				rsa_key,
+				algorithms=ALGORITHMS,
+				audience=API_AUDIENCE,
+				issuer="https://"+AUTH0_DOMAIN+"/"
+			)
+		except jwt.ExpiredSignatureError:
+			raise HTTPException(status_code=401, detail="token_expired")
+		except jwt.JWTClaimsError:
+			raise HTTPException(status_code=404, detail="invalid_claims")
 
-            except Exception:
-                raise HTTPException(status_code=401, detail="invalid_header")
-    if payload is not None:
-            return payload
-    raise HTTPException(status_code=401, detail="invalid_header")
+		except Exception:
+			raise HTTPException(status_code=401, detail="invalid_header")
+	if payload is not None:
+		return payload
+	raise HTTPException(status_code=401, detail="invalid_header")
 
 
 @app_private.middleware("http")
@@ -99,8 +101,8 @@ async def user(user_login: str, Authorization = Header(...)):
             return streamer
         
         raise HTTPException(status_code=403, detail="Unauthorized")
-    except:
-        raise HTTPException(status_code=404, detail="Streamer not found")
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=f"Streamer not found {e}")
 
 
 @app_private.post("/user")
