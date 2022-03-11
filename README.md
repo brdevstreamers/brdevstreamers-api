@@ -65,6 +65,6 @@ And
 
 
 ## Contributors
-<a href="https://github.com/Br-Dev-Streamers/brdevstreamers-ui/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Br-Dev-Streamers/brdevstreamers-ui" />
+<a href="https://github.com/Br-Dev-Streamers/brdevstreamers/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Br-Dev-Streamers/brdevstreamers" />
 </a>
