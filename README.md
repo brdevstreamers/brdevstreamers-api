@@ -4,13 +4,11 @@
 
 The main purpose of this project is giving visibility to Brazilian Developers that stream in Twitch.
 
-
 ## Requirements
 
 [x] Python 3
 
 [x] Happyness 🙂
-
 
 ## How to run?
 
@@ -20,14 +18,18 @@ Create a `.env` file with the following content:
 ENV=dev
 CLIENT_ID= #client ID for your Twitch App
 CLIENT_SECRET= #client Secret for your Twitch App
+TWITTER_API_KEY=
+TWITTER_API_SECRET=
+TWITTER_ACCESS_TOKEN=
+TWITTER_ACCESS_SECRET=
+GITHUB_TOKEN=
 PRIVATE_KEY= #private key (prod env only)
 CERT= #cert (prod env only)
 API_TOKEN= #token for private api (you choose here)
 DB= #sqlite db location
 ```
 
-
-## Set up the Postgres DB:
+## Set up the Postgres DB
 
 ```
 docker run -d \
@@ -37,7 +39,6 @@ docker run -d \
     -v /custom/mount:/var/lib/postgresql/data \
     postgres
 ```
-
 
 Then you can run:
 
@@ -51,14 +52,25 @@ And finally:
 
 ### `python main.py`
 
-
 ## Production Deployment
 
 There's a Dockerfile in this project, so you can simply run:
 
 ### `docker build -t brdevstreamers-server .`
 
-
 And
 
 ### `docker run --name brdevstreamers-server -p 8000:8000 -v "/home/brdevstreamers/letsencrypt:/etc/letsencrypt" -v "/home/brdevstreamers/db:/code/brstreamers" -d brdevstreamers-server`
+
+## Contribute
+
+We use a CI/CD pipeline to check the code, run tests and deploy.
+
+By pushing your changes, please run:
+
+```sh
+# Install black if you haven't
+pip install black
+# Run black linter
+black -l 100 -S .
+```
