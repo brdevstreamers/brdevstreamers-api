@@ -8,7 +8,6 @@ from service.twitch_service import TwitchService
 
 
 class TestTwitchService(unittest.TestCase):
-
     def __init__(self, methodName: str = ...) -> None:
         super().__init__(methodName)
         load_dotenv('.env.test')
