@@ -62,6 +62,7 @@ pytest = "*"
 asyncmock = "*"
 pytest-cov = "*"
 black = "*"
+pytest-dotenv = "*"
 
 [requires]
 python_version = "3.7"

@@ -45,7 +45,6 @@ class TestTwitchService(unittest.TestCase):
         twitch.get_users = MagicMock(return_value=streamer)
         return twitch
 
-    # @patch("service.twitch_service.twitch", return_value=mock_twitch())
     def test_get_streamers(self):
         twitch_service = TwitchService()
         twitch_service.twitch = self.mock_twitch()
