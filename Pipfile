@@ -61,6 +61,7 @@ fastapi-cache2 = "*"
 pytest = "*"
 asyncmock = "*"
 pytest-cov = "*"
+black = "*"
 
 [requires]
 python_version = "3.7"
