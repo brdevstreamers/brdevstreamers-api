@@ -1,16 +1,15 @@
+import os
 from peewee import *
 from model.user_interaction_model import UserInteraction
 from model.user_model import User
-from dotenv import dotenv_values
 
-config = dotenv_values(".env")
 
 db = PostgresqlDatabase(
-    config["DB_NAME"],
-    user=config["DB_USER"],
-    password=config["DB_PASS"],
-    host=config["DB_HOST"],
-    port=config["DB_PORT"],
+    os.environ["DB_NAME"],
+    user=os.environ["DB_USER"],
+    password=os.environ["DB_PASS"],
+    host=os.environ["DB_HOST"],
+    port=os.environ["DB_PORT"],
 )
 
 

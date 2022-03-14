@@ -1,8 +1,8 @@
 import json
+import os
 from random import shuffle
 from typing import List
 
-from dotenv import dotenv_values
 from twitchAPI.twitch import Twitch
 from twitchAPI.types import TimePeriod
 
@@ -18,8 +18,7 @@ class TwitchService:
     config, twitch = None, None
 
     def __init__(self):
-        config = dotenv_values(".env")
-        twitch = Twitch(config["CLIENT_ID"], config["CLIENT_SECRET"])
+        twitch = Twitch(os.environ["CLIENT_ID"], os.environ["CLIENT_SECRET"])
 
     def get_streamers(self) -> List[StreamViewModel]:
         streams = self.twitch.get_streams(language="pt", game_id="1469308723")
