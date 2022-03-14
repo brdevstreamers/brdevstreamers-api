@@ -1,4 +1,3 @@
-
 import os
 from model.user_model import User
 from peewee import *

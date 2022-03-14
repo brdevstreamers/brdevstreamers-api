@@ -1,4 +1,3 @@
-
 import os
 from peewee import PostgresqlDatabase, CharField, Model
 

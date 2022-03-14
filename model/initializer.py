@@ -1,4 +1,3 @@
-
 import os
 from model.reward_model import Reward
 from model.user_interaction_model import UserInteraction

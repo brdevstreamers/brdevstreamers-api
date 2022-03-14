@@ -12,7 +12,7 @@ from controller.private_api import app_private
 from controller.public_api import app_public
 from model.initializer import init_db
 
-load_dotenv() 
+load_dotenv()
 
 init_db()
 origins = ["*"]
