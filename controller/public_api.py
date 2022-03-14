@@ -17,7 +17,7 @@ app_public = FastAPI(openapi_prefix="/public")
 
 app_public.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -44,6 +44,7 @@ async def stats():
 @app_public.get("/tags", response_model=List[TagViewModel])
 async def tags():
     return get_tags()
+
 
 @app_public.get("/stats/summary")
 async def stats_summary():

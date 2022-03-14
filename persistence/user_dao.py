@@ -1,11 +1,17 @@
-
 from dotenv import dotenv_values
+
 config = dotenv_values(".env")
 from model.user_model import User
 from peewee import *
 
-db = PostgresqlDatabase(config['DB_NAME'], user=config['DB_USER'],
-                           password=config['DB_PASS'], host=config['DB_HOST'], port=config['DB_PORT'])
+db = PostgresqlDatabase(
+    config["DB_NAME"],
+    user=config["DB_USER"],
+    password=config["DB_PASS"],
+    host=config["DB_HOST"],
+    port=config["DB_PORT"],
+)
+
 
 def exception_handler(func):
     def inner_function(*args, **kwargs):
@@ -13,13 +19,16 @@ def exception_handler(func):
             return func(*args, **kwargs)
         except Exception as e:
             print(f"Error executing {func.__name__}. Error: {e}")
+
     return inner_function
+
 
 @exception_handler
 def get_users_by_name(users):
     users = User.select().where(User.user_login << users).execute()
     db.close()
     return users
+
 
 @exception_handler
 def get_users():
@@ -38,30 +47,35 @@ def get_user_by_login(user_login):
 @exception_handler
 def create_user_model(user):
     res = User.create(
-            user_login=user.user_login,
-            email=user.email,
-            bio=user.bio,
-            discord = user.discord,
-            instagram = user.instagram,
-            linkedin = user.linkedin,
-            github = user.github,
-            twitter = user.twitter)
+        user_login=user.user_login,
+        email=user.email,
+        bio=user.bio,
+        discord=user.discord,
+        instagram=user.instagram,
+        linkedin=user.linkedin,
+        github=user.github,
+        twitter=user.twitter,
+    )
 
     return res
 
 
 @exception_handler
 def update_user_model(user):
-    res = (User
-        .update({User.instagram: user.instagram,
-                    User.linkedin: user.linkedin,
-                    User.github: user.github,
-                    User.twitter: user.twitter,
-                    User.discord: user.discord,
-                    User.bio: user.bio
-                    })
+    res = (
+        User.update(
+            {
+                User.instagram: user.instagram,
+                User.linkedin: user.linkedin,
+                User.github: user.github,
+                User.twitter: user.twitter,
+                User.discord: user.discord,
+                User.bio: user.bio,
+            }
+        )
         .where(User.user_login == user.user_login)
-        .execute())
+        .execute()
+    )
     return res
 
 

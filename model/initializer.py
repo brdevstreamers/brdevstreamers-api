@@ -6,8 +6,13 @@ from peewee import PostgresqlDatabase
 
 config = dotenv_values(".env")
 
-db = PostgresqlDatabase(config['DB_NAME'], user=config['DB_USER'],
-                           password=config['DB_PASS'], host=config['DB_HOST'], port=config['DB_PORT'])
+db = PostgresqlDatabase(
+    config["DB_NAME"],
+    user=config["DB_USER"],
+    password=config["DB_PASS"],
+    host=config["DB_HOST"],
+    port=config["DB_PORT"],
+)
 
 
 def init_db():

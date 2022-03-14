@@ -1,4 +1,3 @@
-
 import aioredis
 import uvicorn
 from dotenv import dotenv_values
@@ -31,9 +30,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.on_event("startup")
 async def startup():
-    redis =  aioredis.from_url(f"redis://{config['REDIS_HOST']}", encoding="utf8", decode_responses=True)
+    redis = aioredis.from_url(
+        f"redis://{config['REDIS_HOST']}", encoding="utf8", decode_responses=True
+    )
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
 
@@ -44,18 +46,15 @@ async def shutdown():
 
 app.add_middleware(GZipMiddleware)
 
-if __name__ == '__main__':
-    if(config["ENV"] == 'prod'):
-        uvicorn.run("main:app",
-                    host="0.0.0.0",
-                    port=8000,
-                    reload=True,
-                    ssl_keyfile=config["PRIVATE_KEY"],
-                    ssl_certfile=config["CERT"]
-                    )
+if __name__ == "__main__":
+    if config["ENV"] == "prod":
+        uvicorn.run(
+            "main:app",
+            host="0.0.0.0",
+            port=8000,
+            reload=True,
+            ssl_keyfile=config["PRIVATE_KEY"],
+            ssl_certfile=config["CERT"],
+        )
     else:
-        uvicorn.run("main:app",
-                    host="0.0.0.0",
-                    port=8000,
-                    reload=True
-                    )
+        uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

@@ -6,8 +6,8 @@ from pydantic import BaseModel
 
 
 class UserInteractionViewModel(BaseModel):
-    user_login:str
-    target_user:Optional[str]
+    user_login: str
+    target_user: Optional[str]
     date: datetime
     type: str
     interaction_fingerprint: str
