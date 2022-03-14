@@ -12,7 +12,7 @@ jobs:
         with:
           python-version: 3.8
       - name: Install dependencies
-        run: pip install --no-cache-dir --upgrade -r /code/requirements.txt
+        run: pip install --no-cache-dir --upgrade -r requirements.txt
       - name: Execute the black linter
         run: black -l 100 -S . --check
       - name: Execute Tests
