@@ -39,9 +39,7 @@ def get_stats() -> List[StatsViewModel]:
 
 
 def get_stats_summary():
-    streams = (
-        UserInteraction.select().where(UserInteraction.type == "STREAM_CLICK").count()
-    )
+    streams = UserInteraction.select().where(UserInteraction.type == "STREAM_CLICK").count()
     vods = UserInteraction.select().where(UserInteraction.type == "VOD_CLICK").count()
     previews = UserInteraction.select().where(UserInteraction.type == "PREVIEW").count()
     stats_summary = {"streams": streams, "vods": vods, "previews": previews}

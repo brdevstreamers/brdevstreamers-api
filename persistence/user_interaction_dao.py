@@ -27,9 +27,7 @@ def exception_handler(func):
 @exception_handler
 def get_user_interactions_by_user_login(user_login):
     user_interactions = (
-        UserInteraction.select()
-        .where(UserInteraction.user_login == user_login)
-        .execute()
+        UserInteraction.select().where(UserInteraction.user_login == user_login).execute()
     )
     db.close()
     return user_interactions
