@@ -13,7 +13,6 @@ from view_model.tag_viewmodel import TagViewModel
 from view_model.vod_viewmodel import VodViewModel
 
 
-
 class TwitchService:
 
     config, twitch = None, None
@@ -21,9 +20,6 @@ class TwitchService:
     def __init__(self):
         config = dotenv_values(".env")
         twitch = Twitch(config["CLIENT_ID"], config["CLIENT_SECRET"])
-
-   
-
 
     def get_streamers(self) -> List[StreamViewModel]:
         streams = self.twitch.get_streams(language="pt", game_id="1469308723")
@@ -66,10 +62,8 @@ class TwitchService:
         shuffle(streams_model)
         return streams_model
 
-
     def get_streamer(self, id):
         return self.twitch.get_users(user_ids=[id])["data"][0]
-
 
     def get_vods(self) -> List[VodViewModel]:
         vods = self.twitch.get_videos(language="pt", game_id="1469308723", period=TimePeriod.DAY)
@@ -112,10 +106,8 @@ class TwitchService:
             print(e)
         return vods_model
 
-
     def is_long_enough(self, duration):
         return "h" in duration
-
 
     def get_tags(self) -> List[TagViewModel]:
         streams = self.twitch.get_streams(language="pt", game_id="1469308723")
@@ -126,7 +118,6 @@ class TwitchService:
             tag_model = TagViewModel(id=tag["tag_id"], name=tag["localization_names"]["pt-br"])
             tags_dict[tag["tag_id"]] = tag_model
         return list(tags_dict.values())
-
 
     def get_tag_list_from_streams(self, streams):
         tag_ids = []
