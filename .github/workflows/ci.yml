@@ -1,9 +1,12 @@
 name: Continuous Integration Tests
 
-on: [push]
+on:
+  push:
+    branches:
+      - "main"
 
 jobs:
-  execute_black_linter_check:
+  lint-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,6 +15,25 @@ jobs:
         with:
           python-version: 3.8
       - name: Install dependencies
-        run: pip install black
+        run: pip install --no-cache-dir --upgrade -r requirements.txt
       - name: Execute the black linter
         run: black -l 100 -S . --check
+      - name: Execute Tests
+        run: pytest --envfile .env.test --cov=. test
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint-and-test]
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build the brstreamers-bot Docker image
+      run: |
+        docker build -t ghcr.io/br-dev-streamers/brdevstreamers:latest .
+        docker push ghcr.io/br-dev-streamers/brdevstreamers:latest

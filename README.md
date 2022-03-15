@@ -1,3 +1,5 @@
+![Coverage](./coverage.svg)
+
 # Br Dev Streamers - Backend
 
 ![Logo](./logo.svg)
