@@ -17,8 +17,8 @@ class TwitchService:
 
     config, twitch = None, None
 
-    def __init__(self):
-        twitch = Twitch(os.environ["CLIENT_ID"], os.environ["CLIENT_SECRET"])
+    def __init__(self, twitch):
+        self.twitch = twitch
 
     def get_streamers(self) -> List[StreamViewModel]:
         streams = self.twitch.get_streams(language="pt", game_id="1469308723")

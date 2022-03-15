@@ -10,7 +10,7 @@ from service.twitch_service import TwitchService
 class TestTwitchService(unittest.TestCase):
     def __init__(self, methodName: str = ...) -> None:
         super().__init__(methodName)
-        load_dotenv('.env.test')
+        
 
     def mock_twitch(self):
         twitch = Mock()
@@ -51,8 +51,7 @@ class TestTwitchService(unittest.TestCase):
         return twitch
 
     def test_get_streamers(self):
-        twitch_service = TwitchService()
-        twitch_service.twitch = self.mock_twitch()
+        twitch_service = TwitchService(self.mock_twitch())
         streamers = twitch_service.get_streamers()
         self.assertEqual(len(streamers), 1)
         self.assertEqual(streamers[0].user_login, "marcobrunodev")
