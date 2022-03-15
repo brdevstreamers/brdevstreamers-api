@@ -63,6 +63,7 @@ asyncmock = "*"
 pytest-cov = "*"
 black = "*"
 pytest-dotenv = "*"
+coverage-badge = "*"
 
 [requires]
 python_version = "3.7"
