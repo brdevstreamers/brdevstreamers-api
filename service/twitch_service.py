@@ -120,7 +120,10 @@ class TwitchService:
 
     def get_tag_list_from_streams(self, streams):
         tag_ids = []
-        for s in streams["data"]:
-            for tag in s["tag_ids"]:
-                tag_ids.append(tag)
+        try:
+            for s in streams["data"]:
+                for tag in s["tag_ids"]:
+                    tag_ids.append(tag)
+        except Exception as e:
+            print(e)
         return tag_ids
