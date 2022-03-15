@@ -13,6 +13,7 @@ class UpdateUserViewModel(BaseModel):
     github: Optional[str]
     twitter: Optional[str]
 
+
 class UserOutViewModel(BaseModel):
     user_login: Optional[str]
     email: Optional[str]
@@ -21,4 +22,4 @@ class UserOutViewModel(BaseModel):
     twitter_url: Optional[str]
     instagram_url: Optional[str]
     linkedin_url: Optional[str]
-    discord_url: Optional[str]    
+    discord_url: Optional[str]

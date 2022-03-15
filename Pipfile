@@ -58,6 +58,12 @@ PyJWT = "==2.3.0"
 PyNaCl = "==1.5.0"
 PyYAML = "==6.0"
 fastapi-cache2 = "*"
+pytest = "*"
+asyncmock = "*"
+pytest-cov = "*"
+black = "*"
+pytest-dotenv = "*"
+coverage-badge = "*"
 
 [requires]
 python_version = "3.7"

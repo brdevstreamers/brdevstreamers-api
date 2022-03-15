@@ -1,23 +1,29 @@
+import os
 from typing import List
 
-from dotenv import dotenv_values
 from peewee import *
 
 from model.user_interaction_model import UserInteraction
 from view_model.stats_viewmodel import StatsViewModel
 
-config = dotenv_values(".env")
 
-db = PostgresqlDatabase(config['DB_NAME'], user=config['DB_USER'],
-                           password=config['DB_PASS'], host=config['DB_HOST'], port=config['DB_PORT'])
+db = PostgresqlDatabase(
+    os.environ["DB_NAME"],
+    user=os.environ["DB_USER"],
+    password=os.environ["DB_PASS"],
+    host=os.environ["DB_HOST"],
+    port=os.environ["DB_PORT"],
+)
+
 
 def get_stats() -> List[StatsViewModel]:
     cursor = db.execute_sql(
-        "SELECT distinct s.target_user, " +
-        "(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'STREAM_CLICK')," +
-        "(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'VOD_CLICK')," +
-        "(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'PREVIEW_CLICK')" +
-        "FROM userinteraction s ORDER BY s.target_user")
+        "SELECT distinct s.target_user, "
+        + "(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'STREAM_CLICK'),"
+        + "(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'VOD_CLICK'),"
+        + "(SELECT count(*) FROM userinteraction WHERE target_user = s.target_user AND type = 'PREVIEW_CLICK')"
+        + "FROM userinteraction s ORDER BY s.target_user"
+    )
 
     stats: List[StatsViewModel] = []
 
@@ -29,19 +35,33 @@ def get_stats() -> List[StatsViewModel]:
         stat.preview_clicks = row[3]
         stats.append(stat)
     return stats
-       
+
+
 def get_stats_summary():
-    streams = UserInteraction.select().where(UserInteraction.type == 'STREAM_CLICK').count()
-    vods = UserInteraction.select().where(UserInteraction.type == 'VOD_CLICK').count()
-    previews = UserInteraction.select().where(UserInteraction.type == 'PREVIEW').count()
+    streams = UserInteraction.select().where(UserInteraction.type == "STREAM_CLICK").count()
+    vods = UserInteraction.select().where(UserInteraction.type == "VOD_CLICK").count()
+    previews = UserInteraction.select().where(UserInteraction.type == "PREVIEW").count()
     stats_summary = {"streams": streams, "vods": vods, "previews": previews}
     return stats_summary
 
+
 def compute_stat(stat: UserInteraction):
-    db_stat = UserInteraction.select().where(UserInteraction.target_user == stat.target_user, 
-        UserInteraction.type == stat.type,
-        UserInteraction.date == stat.date,
-        UserInteraction.interaction_fingerprint == stat.interaction_fingerprint).count()
+    db_stat = (
+        UserInteraction.select()
+        .where(
+            UserInteraction.target_user == stat.target_user,
+            UserInteraction.type == stat.type,
+            UserInteraction.date == stat.date,
+            UserInteraction.interaction_fingerprint == stat.interaction_fingerprint,
+        )
+        .count()
+    )
     if db_stat == 0:
-        return UserInteraction.create(user_login=stat.user_login, date=stat.date, target_user=stat.target_user, type=stat.type, interaction_fingerprint=stat.interaction_fingerprint)
+        return UserInteraction.create(
+            user_login=stat.user_login,
+            date=stat.date,
+            target_user=stat.target_user,
+            type=stat.type,
+            interaction_fingerprint=stat.interaction_fingerprint,
+        )
     return None
