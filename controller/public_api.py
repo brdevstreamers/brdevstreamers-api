@@ -3,7 +3,6 @@ from typing import List
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi_cache.decorator import cache
 
 from service.stats_service import compute_stat, get_stats, get_stats_summary
 from service.twitch_service import TwitchService
@@ -28,14 +27,12 @@ app_public.add_middleware(
 
 
 @app_public.get("/streams", response_model=List[StreamViewModel])
-@cache(expire=60)
 async def streams():
     twitch_service = TwitchService(twitch)
     return twitch_service.get_streamers()
 
 
 @app_public.get("/vods", response_model=List[VodViewModel])
-@cache(expire=60)
 async def vods():
     twitch_service = TwitchService(twitch)
     return twitch_service.get_vods()
