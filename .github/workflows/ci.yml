@@ -16,4 +16,4 @@ jobs:
       - name: Execute the black linter
         run: black -l 100 -S . --check
       - name: Execute Tests
-        run: pytest --cov=. test
+        run: pytest --envfile .env.test --cov=. test
