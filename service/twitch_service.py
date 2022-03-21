@@ -6,8 +6,8 @@ from typing import List
 from twitchAPI.twitch import Twitch
 from twitchAPI.types import TimePeriod
 
-from model.user_model import User
-from persistence.user_dao import get_users_by_name
+# from model.user_model import User
+# from persistence.user_dao import get_users_by_name
 from view_model.stream_viewmodel import StreamViewModel
 from view_model.tag_viewmodel import TagViewModel
 from view_model.vod_viewmodel import VodViewModel
@@ -44,20 +44,20 @@ class TwitchService:
             stream_users.append(s["user_login"])
             streams_model.append(stream)
 
-        try:
-            streamers = get_users_by_name(stream_users)
-            for s in streamers:
-                for stream in streams_model:
-                    if stream.user_login == s.user_login:
-                        stream.github_url = s.github
-                        stream.twitter_url = s.twitter
-                        stream.instagram_url = s.instagram
-                        stream.linkedin_url = s.linkedin
-                        stream.discord_url = s.discord
-                        stream.bio = s.bio
-                        break
-        except Exception as e:
-            print(e)
+        # try:
+        #     streamers = get_users_by_name(stream_users)
+        #     for s in streamers:
+        #         for stream in streams_model:
+        #             if stream.user_login == s.user_login:
+        #                 stream.github_url = s.github
+        #                 stream.twitter_url = s.twitter
+        #                 stream.instagram_url = s.instagram
+        #                 stream.linkedin_url = s.linkedin
+        #                 stream.discord_url = s.discord
+        #                 stream.bio = s.bio
+        #                 break
+        # except Exception as e:
+        #     print(e)
         shuffle(streams_model)
         return streams_model
 
@@ -89,20 +89,20 @@ class TwitchService:
 
                 vod_users.append(s["user_login"])
                 vods_model.append(stream)
-        try:
-            streamers = get_users_by_name(vod_users)
-            for s in streamers:
-                for stream in vods_model:
-                    if stream.user_login == s.user_login:
-                        stream.github_url = s.github
-                        stream.twitter_url = s.twitter
-                        stream.instagram_url = s.instagram
-                        stream.linkedin_url = s.linkedin
-                        stream.discord_url = s.discord
-                        stream.bio = s.bio
-                        break
-        except Exception as e:
-            print(e)
+        # try:
+        #     streamers = get_users_by_name(vod_users)
+        #     for s in streamers:
+        #         for stream in vods_model:
+        #             if stream.user_login == s.user_login:
+        #                 stream.github_url = s.github
+        #                 stream.twitter_url = s.twitter
+        #                 stream.instagram_url = s.instagram
+        #                 stream.linkedin_url = s.linkedin
+        #                 stream.discord_url = s.discord
+        #                 stream.bio = s.bio
+        #                 break
+        # except Exception as e:
+        #     print(e)
         return vods_model
 
     def is_long_enough(self, duration):

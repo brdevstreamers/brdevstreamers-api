@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from service.stats_service import compute_stat, get_stats, get_stats_summary
+# from service.stats_service import compute_stat, get_stats, get_stats_summary
 from service.twitch_service import TwitchService
 from view_model.stats_viewmodel import StatsViewModel
 from view_model.stream_viewmodel import StreamViewModel
@@ -42,9 +42,9 @@ async def vods():
     return twitch_service.get_vods()
 
 
-@app_public.get("/stats", response_model=List[StatsViewModel])
-async def stats():
-    return get_stats()
+# @app_public.get("/stats", response_model=List[StatsViewModel])
+# async def stats():
+#     return get_stats()
 
 
 @app_public.get("/tags", response_model=List[TagViewModel])
@@ -53,6 +53,6 @@ async def tags():
     return twitch_service.get_tags()
 
 
-@app_public.get("/stats/summary")
-async def stats_summary():
-    return get_stats_summary()
+# @app_public.get("/stats/summary")
+# async def stats_summary():
+#     return get_stats_summary()
