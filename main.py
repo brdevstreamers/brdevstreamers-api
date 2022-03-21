@@ -7,11 +7,11 @@ from fastapi.middleware.gzip import GZipMiddleware
 
 from controller.private_api import app_private
 from controller.public_api import app_public
-from model.initializer import init_db
+# from model.initializer import init_db
 
 load_dotenv()
 
-init_db()
+# init_db()
 origins = ["*"]
 
 app = FastAPI()
