@@ -4,7 +4,7 @@ from twitchAPI.twitch import Twitch
 config = dotenv_values(".env")
 
 
-twitch = Twitch(os.environ["CLIENT_ID"], os.environ["CLIENT_SECRET"])
+twitch = Twitch(config["CLIENT_ID"], config["CLIENT_SECRET"])
 
 users = twitch.get_users(user_ids=["227168488"])
 

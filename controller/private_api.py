@@ -25,7 +25,7 @@ from view_model.user_viewmodel import UpdateUserViewModel
 origins = ["*"]
 
 
-load_dotenv(dotenv_path=".env")
+config = dotenv_values(".env")
 app_private = FastAPI(openapi_prefix="/api")
 
 app_private.add_middleware(

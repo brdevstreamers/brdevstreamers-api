@@ -1,6 +1,6 @@
 import os
 import uvicorn
-from dotenv import load_dotenv
+from dotenv import dotenv_values, load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
@@ -9,7 +9,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from controller.public_api import app_public
 # from model.initializer import init_db
 
-load_dotenv()
+config = dotenv_values(".env")
 
 # init_db()
 origins = ["*"]
