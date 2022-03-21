@@ -1,5 +1,6 @@
 import os
 from typing import List
+from dotenv import load_dotenv
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,6 +12,9 @@ from view_model.stream_viewmodel import StreamViewModel
 from view_model.tag_viewmodel import TagViewModel
 from view_model.vod_viewmodel import VodViewModel
 from twitchAPI.twitch import Twitch
+
+load_dotenv(dotenv_path=".env")
+
 
 origins = ["*"]
 

@@ -5,18 +5,18 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
-# from controller.private_api import app_private
+from controller.private_api import app_private
 from controller.public_api import app_public
-# from model.initializer import init_db
+from model.initializer import init_db
 
 load_dotenv()
 
-# init_db()
+init_db()
 origins = ["*"]
 
 app = FastAPI()
 
-# app.mount("/api", app_private)
+app.mount("/api", app_private)
 app.mount("/public", app_public)
 
 

@@ -2,7 +2,7 @@ import json
 from http.client import HTTPException
 from urllib.request import Request, urlopen
 
-from dotenv import dotenv_values
+from dotenv import dotenv_values, load_dotenv
 from fastapi import FastAPI, Header
 from fastapi.middleware.cors import CORSMiddleware
 from jose import jwt
@@ -25,7 +25,7 @@ from view_model.user_viewmodel import UpdateUserViewModel
 origins = ["*"]
 
 
-config = dotenv_values(".env")
+load_dotenv(dotenv_path=".env")
 app_private = FastAPI(openapi_prefix="/api")
 
 app_private.add_middleware(
