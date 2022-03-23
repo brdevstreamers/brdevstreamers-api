@@ -9,7 +9,6 @@ def get_contributors():
 
     r_ui = requests.get('https://api.github.com/repos/Br-Dev-Streamers/brdevstreamers-ui/contributors')
     contrib_ui = r_ui.json()
-
     contributors_list = []
 
     for c in contrib_server:
