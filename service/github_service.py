@@ -17,8 +17,14 @@ def get_contributors():
         contributors_list.append(contributor)
     
     for c in contrib_ui:
-        contributor = {"name": c['login'], "image": c["avatar_url"]}
-        contributors_list.append(contributor)
+        if not_in_list(contributors_list, c['login']):
+            contributor = {"name": c['login'], "image": c["avatar_url"]}
+            contributors_list.append(contributor)
 
     return contributors_list
 
+def not_in_list(list, login):
+    for contributor in list:
+        if contributor['name'] == login:
+            return False
+    return True
