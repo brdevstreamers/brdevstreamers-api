@@ -14,7 +14,7 @@ uvicorn = {extras = ["standard"],version = "==0.17.5"}
 peewee = "==3.14.9"
 python-jose = {extras = ["cryptography"],version = "==3.3.0"}
 brotli-asgi = "*"
-psycopg2 = "*"
+psycopg2-binary = "*"
 aiohttp = "==3.8.1"
 aiosignal = "==1.2.0"
 anyio = "==3.5.0"
