@@ -16,7 +16,7 @@ origins = ["*"]
 
 app = FastAPI()
 
-app.mount("/api", app_private)
+# app.mount("/api", app_private)
 app.mount("/public", app_public)
 
 
