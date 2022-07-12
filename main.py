@@ -35,7 +35,7 @@ if __name__ == '__main__':
     if(os.environ["ENV"] == 'prod'):
         uvicorn.run("main:app",
                     host="0.0.0.0",
-                    port=8000,
+                    port=80,
                     reload=True,
                     ssl_keyfile=os.environ["PRIVATE_KEY"],
                     ssl_certfile=os.environ["CERT"]
@@ -43,6 +43,6 @@ if __name__ == '__main__':
     else:
         uvicorn.run("main:app",
                     host="0.0.0.0",
-                    port=8000,
+                    port=80,
                     reload=True
                     )
