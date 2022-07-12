@@ -48,13 +48,3 @@ async def stats():
 async def tags():
     twitch_service = TwitchService(twitch)
     return twitch_service.get_tags()
-
-
-@app_public.get("/stats/summary")
-async def stats_summary():
-    return get_stats_summary()
-
-
-@app_public.get("/contributors")
-async def contributors():
-    return get_contributors()
