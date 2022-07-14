@@ -41,8 +41,7 @@ if __name__ == '__main__':
                     port=8000,
                     reload=True,
                     ssl_keyfile=os.environ["PRIVATE_KEY"],
-                    ssl_certfile=os.environ["CERT"],
-                    password=""
+                    ssl_certfile=os.environ["CERT"]
                     )
     else:
         uvicorn.run("main:app",
