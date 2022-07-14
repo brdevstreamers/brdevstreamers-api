@@ -11,7 +11,7 @@ from model.initializer import init_db
 
 load_dotenv()
 
-init_db()
+# init_db()
 origins = ["*"]
 
 app = FastAPI()

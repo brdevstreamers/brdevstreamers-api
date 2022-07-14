@@ -1,5 +1,6 @@
 import os
 from typing import List
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from service.github_service import get_contributors
@@ -14,6 +15,7 @@ from twitchAPI.twitch import Twitch
 
 
 origins = ["*"]
+load_dotenv()
 
 app_public = FastAPI(openapi_prefix="/public")
 twitch = Twitch(os.environ["CLIENT_ID"], os.environ["CLIENT_SECRET"])
