@@ -8,6 +8,8 @@ from fastapi.middleware.gzip import GZipMiddleware
 # from controller.private_api import app_private
 from controller.public_api import app_public
 
+load_dotenv()
+
 origins = ["*"]
 
 app = FastAPI()
