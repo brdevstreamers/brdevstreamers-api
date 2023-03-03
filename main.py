@@ -5,10 +5,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
+load_dotenv()
+
 # from controller.private_api import app_private
 from controller.public_api import app_public
-
-load_dotenv()
 
 origins = ["*"]
 
