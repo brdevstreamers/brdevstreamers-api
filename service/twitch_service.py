@@ -109,14 +109,15 @@ class TwitchService:
         return "h" in duration
 
     def get_tags(self) -> List[TagViewModel]:
-        streams = self.twitch.get_streams(language="pt", game_id="1469308723")
-        tag_ids = self.get_tag_list_from_streams(streams)
-        tags = self.twitch.get_all_stream_tags(tag_ids=tag_ids)
-        tags_dict = {}
-        for tag in tags["data"]:
-            tag_model = TagViewModel(id=tag["tag_id"], name=tag["localization_names"]["pt-br"])
-            tags_dict[tag["tag_id"]] = tag_model
-        return list(tags_dict.values())
+        # streams = self.twitch.get_streams(language="pt", game_id="1469308723")
+        # tag_ids = self.get_tag_list_from_streams(streams)
+        # tags = self.twitch.get_all_stream_tags(tag_ids=tag_ids)
+        # tags_dict = {}
+        # for tag in tags["data"]:
+        #     tag_model = TagViewModel(id=tag["tag_id"], name=tag["localization_names"]["pt-br"])
+        #     tags_dict[tag["tag_id"]] = tag_model
+        return {}
+        # return list(tags_dict.values())
 
     def get_tag_list_from_streams(self, streams):
         tag_ids = []
